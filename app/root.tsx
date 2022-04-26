@@ -6,8 +6,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import {  Nav } from "./components";
+import { Nav } from "./components";
+import { getSanityClient } from "./lib";
 import styles from "./styles/tailwind.css";
 
 export function links() {
@@ -20,12 +22,21 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const loader: LoaderFunction = () => {
+export const loader: LoaderFunction = async () => {
   console.log("root");
-  return {};
+  const routeData = await getSanityClient().fetch(
+    `*[_type == "route" ]
+        { _id,  slug, page -> {title}
+      }`
+  );
+  const routes = routeData.map((r) => {
+    return { name: r.page.title, to: r.slug.current };
+  });
+  return routes;
 };
 
 export default function App() {
+  const routes = useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -33,7 +44,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Nav />
+        <Nav navigation={routes} />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

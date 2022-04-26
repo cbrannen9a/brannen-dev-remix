@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   if (!routeData) {
     return redirect("/");
   }
-  console.log(routeData.page);
+
   return routeData;
 };
 
@@ -25,7 +25,7 @@ export default function Body() {
     <div>
       {page.title}
       {page.content.map((c) => {
-        return <div>{c.heading}</div>;
+        return <div key={c._key}>{c.heading}</div>;
       })}
     </div>
   );

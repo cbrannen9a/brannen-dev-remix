@@ -1,9 +1,10 @@
+import { Link } from "@remix-run/react";
 import { type FC } from "react";
 
 const Nav: FC<Props> = ({
   navigation = [
-    { name: "Home", href: "/" },
-    { name: "Test", href: "/test" },
+    { name: "Home", to: "/" },
+    { name: "Test", to: "/test" },
   ],
 }) => {
   return (
@@ -21,13 +22,13 @@ const Nav: FC<Props> = ({
 
             <div className="ml-10 flex items-baseline space-x-4">
               {navigation.map((item) => (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.to}
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -43,7 +44,7 @@ interface Props {
 
 interface NavItem {
   name: string;
-  href: string;
+  to: string;
 }
 
 export default Nav;
