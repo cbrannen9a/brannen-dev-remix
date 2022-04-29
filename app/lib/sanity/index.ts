@@ -1,0 +1,1 @@
+export { getSanityClient } from "./client";
