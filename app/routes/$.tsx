@@ -1,5 +1,6 @@
 import { redirect, type LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { Content } from "~/components";
 import { getSanityClient } from "~/lib";
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -20,13 +21,12 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export default function Body() {
-  const { page } = useLoaderData();
+  const {
+    page: { content },
+  } = useLoaderData();
   return (
     <div>
-      {page.title}
-      {page.content.map((c) => {
-        return <div key={c._key}>{c.heading}</div>;
-      })}
+      <Content content={content} />
     </div>
   );
 }
