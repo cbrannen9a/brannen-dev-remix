@@ -5,7 +5,11 @@ export type ContentTypes =
   | "social"
   | "textSection";
 
-export interface BaseContent {
+export interface BaseEntity {
+  _id: string;
+}
+
+export interface BaseContent extends BaseEntity {
   _key: string;
   _type: ContentTypes;
 }
