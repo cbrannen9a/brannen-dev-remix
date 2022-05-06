@@ -1,6 +1,6 @@
-import { redirect, type LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { type LoaderFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { Content, SanityPreview } from "~/components";
 import { filterDataToSingleItem, getSanityClient } from "~/lib";
 
@@ -16,16 +16,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       }`;
   const queryParams = { slug: params["*"] ?? "/" };
 
-  const initialData = await getSanityClient(preview).fetch(
-    `*[_type == "route" && slug.current == $slug]
-        { _id,  slug, page ->
-      }`,
-    queryParams
-  );
-
-  if (!initialData) {
-    return redirect("/");
-  }
+  const initialData = await getSanityClient(preview).fetch(query, queryParams);
 
   return {
     initialData,
@@ -37,7 +28,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   };
 };
 
+export const ErrorBoundary = () => {
+  return (
+    <div>
+      Something's gone wrong
+      <Link to="/">Home</Link>
+    </div>
+  );
+};
+
 export default function Body() {
+  const loaderData = useLoaderData();
+
   const {
     initialData,
     preview,
@@ -45,9 +47,14 @@ export default function Body() {
     queryParams,
     sanityProjectId,
     sanityDataset,
-  } = useLoaderData();
+  } = loaderData;
 
   const [data, setData] = useState(initialData);
+
+  useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
+  if (!data) return <div />;
   const {
     page: { content },
   } = filterDataToSingleItem(data, preview);
