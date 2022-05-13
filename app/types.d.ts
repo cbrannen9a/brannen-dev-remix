@@ -3,7 +3,9 @@ export type ContentTypes =
   | "cards"
   | "banner"
   | "social"
-  | "textSection";
+  | "textSection"
+  | "contentPreview"
+  | "route";
 
 export interface BaseEntity {
   _id: string;
@@ -60,12 +62,30 @@ export interface TextSectionContent extends BaseContent {
   text: SanityBlockContent;
 }
 
+export interface ContentPreview extends BaseContent {
+  _type: "contentPreview";
+  parentRoute: RouteReference;
+  data: PreviewContent[];
+}
+
+export interface RouteReference extends BaseContent {
+  _type: "route";
+  slug: Slug;
+}
+
+export interface PreviewContent {
+  title: string;
+  slug: Slug;
+}
+
 export type Content =
   | HeroContent
   | CardsContent
   | BannerContent
   | SocialContent
-  | TextSectionContent;
+  | TextSectionContent
+  | ContentPreview
+  | RouteReference;
 
 export type SanityBlockContent = BlockContent[];
 
@@ -84,27 +104,10 @@ export type BlockContentChildren = {
   text: string;
 };
 
-export interface CommonContentItem {
-  _id: string;
-  name: string;
-  title: string;
-  description: string;
-  mainImage: any;
-  slug: string;
-}
-export interface PostContentItem extends CommonContentItem {
-  _type: "post";
-  publishedAt: string;
-}
-
-export interface ProjectContentItem extends CommonContentItem {
-  _type: "project";
-  skills: SkillItem[];
-}
-
-export type SkillItem = { title: string; description: SanityBlockContent };
-
-export type ContentItem = PostContentItem | ProjectContentItem;
+export type Slug = {
+  _type: "slug";
+  current: string;
+};
 
 export type CTA = {
   title: string;

@@ -1,50 +1,47 @@
 import { type FC } from "react";
-import { type Content } from "~/types";
+import { type PreviewContent, type Content } from "~/types";
 import Banner from "./Banner";
 import Cards from "./Cards";
+import ContentPreview from "./ContentPreview";
 import Hero from "./Hero";
 import Social from "./Social";
 import TextSection from "./TextSection";
 
-const ContentComponent: FC<Props> = ({ content }) => (
-  <>
-    {content.map((item) => {
-      switch (item._type) {
-        case "hero":
-          return (
-            <Hero
-              key={item._key}
-              heading={item.heading}
-              subHeading={item.subHeading}
-              tagline={item.tagline}
-              ctas={item.ctas}
-              image={item.image}
-            />
-          );
-        case "cards":
-          return <Cards key={item._key} cards={item.cards} />;
-        case "banner":
-          return (
-            <Banner
-              key={item._key}
-              heading={item.heading}
-              subHeading={item.subHeading}
-              ctas={item.ctas}
-            />
-          );
-        case "social":
-          return <Social key={item._key} social={item.social} />;
-        case "textSection":
-          return <TextSection key={item._key} text={item.text} />;
-        default:
-          return null;
-      }
-    })}
-  </>
-);
+const ContentComponent: FC<Props> = ({ content, previewContent }) => {
+  if (!content || content.length === 0) return null;
+  return (
+    <>
+      {content.map((item) => {
+        switch (item._type) {
+          case "hero":
+            return <Hero key={item._key} {...item} />;
+          case "cards":
+            return <Cards key={item._key} {...item} />;
+          case "banner":
+            return <Banner key={item._key} {...item} />;
+          case "social":
+            return <Social key={item._key} {...item} />;
+          case "textSection":
+            return <TextSection key={item._key} {...item} />;
+          case "contentPreview":
+            return (
+              <ContentPreview
+                key={item._key}
+                {...item}
+                data={previewContent[item.parentRoute.slug.current]}
+              />
+            );
+          default:
+            return null;
+        }
+      })}
+    </>
+  );
+};
 
 interface Props {
   content: Content[];
+  previewContent: Record<string, PreviewContent[]>;
 }
 
 export default ContentComponent;
