@@ -1,10 +1,12 @@
-import type { CTA, SanityBlockContent } from "~/types";
+import type { HeroContent } from "~/types";
 import { type FC } from "react";
 // import Image from "next/image";
 import { PortableText } from "@portabletext/react";
 import Ctas from "../Common";
 
-const Hero: FC<Props> = ({ heading, subHeading, tagline, ctas, image }) => (
+const Hero: FC<
+  Pick<HeroContent, "heading" | "subHeading" | "tagline" | "ctas" | "image">
+> = ({ heading, subHeading, tagline, ctas, image }) => (
   <section>
     <div className="max-w-7xl mx-auto relative bg-white overflow-hidden p-1 sm:p-4">
       <>
@@ -17,7 +19,7 @@ const Hero: FC<Props> = ({ heading, subHeading, tagline, ctas, image }) => (
               </span>
             </h1>
             <div className="mb-2 mt-3 text-base text-gray-500 md:text-xl lg:mx-0">
-              <PortableText value={tagline} />
+              {tagline ? <PortableText value={tagline} /> : null}
             </div>
 
             {ctas && (
@@ -43,20 +45,5 @@ const Hero: FC<Props> = ({ heading, subHeading, tagline, ctas, image }) => (
     </div>
   </section>
 );
-
-interface Props {
-  heading: string;
-  subHeading: string;
-  tagline: SanityBlockContent;
-  ctas?: CTA[];
-  image?: {
-    alt: string;
-    asset: {
-      url: string;
-      creditLine: string;
-      description: string;
-    };
-  };
-}
 
 export default Hero;

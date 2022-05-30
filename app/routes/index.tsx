@@ -1,4 +1,4 @@
-import Component from "./$";
+import Component, { loader } from "./$";
 
-export * from "./$";
+export { loader };
 export default Component;

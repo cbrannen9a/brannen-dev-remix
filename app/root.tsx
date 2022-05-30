@@ -22,21 +22,24 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const loader: LoaderFunction = async () => {
-  console.log("root");
+export const loader: LoaderFunction = async ({ params }) => {
   const routeData = await getSanityClient().fetch(
     `*[_type == "route" ]
         { _id,  slug, page -> {title}
       }`
   );
-  const routes = routeData.map((r) => {
-    return { name: r.page.title, to: r.slug.current };
-  });
+  const routes = routeData.map(
+    (r: { page: { title: string }; slug: { current: string } }) => {
+      return { name: r.page.title, to: r?.slug?.current ?? "/" };
+    }
+  );
+
   return routes;
 };
 
 export default function App() {
   const routes = useLoaderData();
+
   return (
     <html lang="en">
       <head>
