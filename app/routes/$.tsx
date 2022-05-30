@@ -1,8 +1,7 @@
 import { type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
-import { Content, SanityPreview } from "~/components";
-import { filterDataToSingleItem, getSanityClient } from "~/lib";
+import { Content } from "~/components";
+import { getSanityClient } from "~/lib";
 import { type ContentPreview, type Content as ContentItem } from "~/types";
 
 const queryHelper = (
@@ -14,7 +13,7 @@ const queryHelper = (
 } => {
   const isSubpage =
     paramValue && paramValue?.split("/").length > 1 ? true : false;
-  let query = `*[_type == "route" && slug.current == $slug]
+  let query = `*[_type == "route" && slug.current == $slug][0]
         { ..., 
           page ->{
             ...,
@@ -27,7 +26,7 @@ const queryHelper = (
   let queryParams = { slug: paramValue ?? "/" };
 
   if (isSubpage) {
-    query = `*[_type == "page" && slug.current == $slug]
+    query = `*[_type == "page" && slug.current == $slug][0]
         { ..., 
           content[] {
               ...,
@@ -47,37 +46,39 @@ const previewQuery = `*[_type == "page" && parentRoute -> slug.current == $slug]
           slug         
       }`;
 
-const loadableContent = (
-  initialData: any,
-  preview: boolean,
-  isSubpage: boolean
-) => {
-  const single = filterDataToSingleItem(initialData, preview);
-  const data = isSubpage ? single.content : single.page.content;
+const loadableContent = (content: any): { root: string }[] => {
+  if (!content) {
+    return [];
+  }
 
-  return data
+  return content
     .filter((ci: ContentItem) => ci._type === "contentPreview")
     .map((i: ContentPreview) => {
       return { root: i.parentRoute.slug.current };
     });
 };
 
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const requestUrl = new URL(request?.url);
-  const preview =
-    requestUrl?.searchParams?.get("preview") ===
-    process.env.SANITY_PREVIEW_SECRET;
+const getPageData = async (
+  query: string,
+  queryParams: Record<string, unknown>,
+  isSubpage: boolean,
+  preview = false
+) => {
+  const data = await getSanityClient(preview).fetch(query, queryParams);
+  const pageData = isSubpage ? data : data.page;
+  const contentToLoad = loadableContent(pageData.content);
+  const previewData = await getPreviewContent(contentToLoad);
+  return { pageData, previewData };
+};
 
-  const { query, queryParams, isSubpage } = queryHelper(params["*"]);
-
-  const initialData = await getSanityClient(preview).fetch(query, queryParams);
-
-  const toLoadContent = loadableContent(initialData, preview, isSubpage);
-
+const getPreviewContent = async (
+  contentToLoad: { root: string }[],
+  preview = false
+) => {
   let previewContent;
-  if (toLoadContent.length > 0) {
+  if (contentToLoad.length > 0) {
     const previewContentData = await Promise.all(
-      toLoadContent.map(async (toLoad: { root: string }) => {
+      contentToLoad.map(async (toLoad: { root: string }) => {
         const d = await getSanityClient(preview).fetch(previewQuery, {
           slug: toLoad.root,
         });
@@ -89,16 +90,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       return { ...a, ...v };
     }, {});
   }
+  return previewContent;
+};
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const requestUrl = new URL(request?.url);
+  const preview =
+    requestUrl?.searchParams?.get("preview") ===
+    process.env.SANITY_PREVIEW_SECRET;
+
+  const { query, queryParams, isSubpage } = queryHelper(params["*"]);
+
+  const { pageData, previewData } = await getPageData(
+    query,
+    queryParams,
+    isSubpage,
+    preview
+  );
 
   return {
-    initialData,
-    isSubpage,
-    preview,
-    query: preview ? query : null,
-    queryParams: preview ? queryParams : null,
-    sanityProjectId: process.env.SANITY_PROJECT_ID,
-    sanityDataset: process.env.SANITY_DATASET,
-    previewContent,
+    pageData,
+    previewData,
   };
 };
 
@@ -112,45 +124,9 @@ export const ErrorBoundary = () => {
 };
 
 export default function Body() {
-  const loaderData = useLoaderData();
+  const { pageData, previewData } = useLoaderData();
 
-  const {
-    initialData,
-    isSubpage,
-    preview,
-    query,
-    queryParams,
-    sanityProjectId,
-    sanityDataset,
-    previewContent,
-  } = loaderData;
-
-  const [data, setData] = useState(initialData);
-
-  useEffect(() => {
-    setData(initialData);
-  }, [initialData]);
-  if (!data) return <div />;
-  const single = filterDataToSingleItem(data, preview);
-
-  return (
-    <div>
-      {preview ? (
-        <SanityPreview
-          data={data}
-          setData={setData}
-          query={query}
-          queryParams={queryParams}
-          sanityProjectId={sanityProjectId}
-          sanityDataset={sanityDataset}
-        />
-      ) : null}
-      {single ? (
-        <Content
-          content={isSubpage ? single.content : single.page.content}
-          previewContent={previewContent}
-        />
-      ) : null}
-    </div>
-  );
+  return pageData ? (
+    <Content content={pageData.content} previewContent={previewData} />
+  ) : null;
 }
