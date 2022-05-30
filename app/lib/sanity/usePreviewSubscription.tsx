@@ -13,7 +13,7 @@ export function usePreviewSubscription<T>(
   useEffect(() => {
     let sub: Subscription;
     let store: GroqStore | undefined;
-    console.log("gh");
+
     async function createStore() {
       // For more details about configuring groq-store see:
       // https://www.npmjs.com/package/@sanity/groq-store
@@ -36,7 +36,6 @@ export function usePreviewSubscription<T>(
         params ?? {}, // Params
         (err, result) => {
           if (err) {
-            console.error("Oh no, an error:", err);
             return;
           }
           setData(result);
@@ -49,7 +48,6 @@ export function usePreviewSubscription<T>(
     }
 
     return () => {
-      console.log("ending", sub, store);
       if (sub) sub.unsubscribe();
       if (store) store.close();
     };

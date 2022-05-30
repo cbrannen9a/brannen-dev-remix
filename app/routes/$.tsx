@@ -25,10 +25,7 @@ const queryHelper = (
           }
       }`;
   let queryParams = { slug: paramValue ?? "/" };
-  console.log(
-    paramValue?.split("/")[paramValue.split("/").length - 1],
-    isSubpage
-  );
+
   if (isSubpage) {
     query = `*[_type == "page" && slug.current == $slug]
         { ..., 
@@ -87,6 +84,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         return { [toLoad.root]: d };
       })
     );
+
     previewContent = previewContentData?.reduce((a, v) => {
       return { ...a, ...v };
     }, {});
@@ -147,10 +145,12 @@ export default function Body() {
           sanityDataset={sanityDataset}
         />
       ) : null}
-      <Content
-        content={isSubpage ? single.content : single.page.content}
-        previewContent={previewContent}
-      />
+      {single ? (
+        <Content
+          content={isSubpage ? single.content : single.page.content}
+          previewContent={previewContent}
+        />
+      ) : null}
     </div>
   );
 }

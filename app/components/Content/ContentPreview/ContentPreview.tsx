@@ -5,10 +5,12 @@ import { type ContentPreview } from "~/types";
 const ContentPreviewComponent: FC<
   Pick<ContentPreview, "data" | "parentRoute">
 > = ({ data, parentRoute }) => {
-  console.log(data);
+  if (!data || !data[parentRoute.slug.current]) {
+    return null;
+  }
   return (
     <ul>
-      {data.map((d) => (
+      {data[parentRoute.slug.current].map((d) => (
         <li key={d.title}>
           <Link to={`${parentRoute.slug.current}/${d.slug.current}`}>
             {d.title}

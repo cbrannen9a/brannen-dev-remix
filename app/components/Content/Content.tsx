@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { Suspense, type FC } from "react";
 import { type PreviewContent, type Content } from "~/types";
 import Banner from "./Banner";
 import Cards from "./Cards";
@@ -8,7 +8,10 @@ import Social from "./Social";
 import TextSection from "./TextSection";
 
 const ContentComponent: FC<Props> = ({ content, previewContent }) => {
-  if (!content || content.length === 0) return null;
+  if (!content || content.length === 0) {
+    return null;
+  }
+
   return (
     <>
       {content.map((item) => {
@@ -25,11 +28,7 @@ const ContentComponent: FC<Props> = ({ content, previewContent }) => {
             return <TextSection key={item._key} {...item} />;
           case "contentPreview":
             return (
-              <ContentPreview
-                key={item._key}
-                {...item}
-                data={previewContent[item.parentRoute.slug.current]}
-              />
+              <ContentPreview key={item._key} {...item} data={previewContent} />
             );
           default:
             return null;
