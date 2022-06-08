@@ -34,11 +34,17 @@ export const loader: LoaderFunction = async ({ params }) => {
     }
   );
 
-  return routes;
+  return {
+    routes,
+    ENV: {
+      SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
+      SANITY_DATASET: process.env.SANITY_DATASET,
+    },
+  };
 };
 
 export default function App() {
-  const routes = useLoaderData();
+  const { routes, ENV } = useLoaderData();
 
   return (
     <html lang="en">
@@ -49,6 +55,11 @@ export default function App() {
       <body>
         <Nav navigation={routes} />
         <Outlet />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+          }}
+        />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

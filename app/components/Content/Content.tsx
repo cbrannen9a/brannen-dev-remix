@@ -1,19 +1,28 @@
-import { Suspense, type FC } from "react";
+import { type FC } from "react";
 import { type PreviewContent, type Content } from "~/types";
 import Banner from "./Banner";
 import Cards from "./Cards";
 import ContentPreview from "./ContentPreview";
 import Hero from "./Hero";
+import { SanityContextProvider } from "./SanityContext";
 import Social from "./Social";
 import TextSection from "./TextSection";
 
-const ContentComponent: FC<Props> = ({ content, previewContent }) => {
+const ContentComponent: FC<Props> = ({
+  content,
+  previewContent,
+  sanityDataset,
+  sanityProjectId,
+}) => {
   if (!content || content.length === 0) {
     return null;
   }
 
   return (
-    <>
+    <SanityContextProvider
+      sanityDataset={sanityDataset}
+      sanityProjectId={sanityProjectId}
+    >
       {content.map((item) => {
         switch (item._type) {
           case "hero":
@@ -34,13 +43,15 @@ const ContentComponent: FC<Props> = ({ content, previewContent }) => {
             return null;
         }
       })}
-    </>
+    </SanityContextProvider>
   );
 };
 
 interface Props {
   content: Content[];
   previewContent: Record<string, PreviewContent[]>;
+  sanityDataset: string;
+  sanityProjectId: string;
 }
 
 export default ContentComponent;
