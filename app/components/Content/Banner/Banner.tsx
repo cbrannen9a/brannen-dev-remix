@@ -1,6 +1,6 @@
 import { type BannerContent } from "~/types";
 import { type FC } from "react";
-import Ctas from "../Common";
+import { Ctas } from "../Common";
 
 const Banner: FC<Pick<BannerContent, "heading" | "subHeading" | "ctas">> = ({
   heading,

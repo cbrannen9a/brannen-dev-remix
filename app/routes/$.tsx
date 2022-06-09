@@ -111,6 +111,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return {
     pageData,
     previewData,
+    sanityProjectId: process.env.SANITY_PROJECT_ID,
+    sanityDataset: process.env.SANITY_DATASET,
   };
 };
 
@@ -124,9 +126,15 @@ export const ErrorBoundary = () => {
 };
 
 export default function Body() {
-  const { pageData, previewData } = useLoaderData();
+  const { pageData, previewData, sanityDataset, sanityProjectId } =
+    useLoaderData();
 
   return pageData ? (
-    <Content content={pageData.content} previewContent={previewData} />
+    <Content
+      content={pageData.content}
+      previewContent={previewData}
+      sanityDataset={sanityDataset}
+      sanityProjectId={sanityProjectId}
+    />
   ) : null;
 }
