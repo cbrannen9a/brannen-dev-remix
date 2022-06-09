@@ -32,7 +32,7 @@ const FigureComponent = ({ value, isInline }: FigureComponentProps) => {
         display: isInline ? "inline-block" : "block",
 
         // Avoid jumping around with aspect-ratio CSS property
-        aspectRatio: `${width} / ${height}`,
+        aspectRatio: `${width}/${height}`,
       }}
     />
   );
