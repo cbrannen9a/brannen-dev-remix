@@ -64,6 +64,7 @@ export interface TextSectionContent extends BaseContent {
 
 export interface ContentPreview extends BaseContent {
   _type: "contentPreview";
+  query: string;
   parentRoute: RouteReference;
   data: Record<string, PreviewContent[]>;
 }

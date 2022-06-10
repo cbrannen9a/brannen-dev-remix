@@ -19,7 +19,8 @@ const queryHelper = (
             ...,
             content[] {
               ...,
-              parentRoute ->
+              parentRoute ->,
+              query->
             }
           }
       }`;
@@ -30,7 +31,8 @@ const queryHelper = (
         { ..., 
           content[] {
               ...,
-              parentRoute ->
+              parentRoute ->,
+              query->
             }
       }`;
     queryParams = {
@@ -54,7 +56,11 @@ const loadableContent = (content: any): { root: string }[] => {
   return content
     .filter((ci: ContentItem) => ci._type === "contentPreview")
     .map((i: ContentPreview) => {
-      return { root: i.parentRoute.slug.current };
+      return {
+        root: i.parentRoute.slug.current,
+        query: i.query,
+        params: i.params,
+      };
     });
 };
 
@@ -67,6 +73,7 @@ const getPageData = async (
   const data = await getSanityClient(preview).fetch(query, queryParams);
   const pageData = isSubpage ? data : data.page;
   const contentToLoad = loadableContent(pageData.content);
+  // console.log(contentToLoad);
   const previewData = await getPreviewContent(contentToLoad);
   return { pageData, previewData };
 };
@@ -79,9 +86,13 @@ const getPreviewContent = async (
   if (contentToLoad.length > 0) {
     const previewContentData = await Promise.all(
       contentToLoad.map(async (toLoad: { root: string }) => {
-        const d = await getSanityClient(preview).fetch(previewQuery, {
-          slug: toLoad.root,
-        });
+        console.log(toLoad.params);
+        const d = await getSanityClient(preview).fetch(
+          toLoad.query.queryCode.code,
+          {
+            slug: toLoad.root,
+          }
+        );
         return { [toLoad.root]: d };
       })
     );
