@@ -127,3 +127,8 @@ export type Color = {
   color: string;
   hue: string;
 };
+
+export interface NavItem {
+  name: string;
+  to: string;
+}

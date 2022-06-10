@@ -11,6 +11,7 @@ import {
 import { Nav } from "./components";
 import { getSanityClient } from "./lib";
 import styles from "./styles/tailwind.css";
+import { type NavItem } from "./types";
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
@@ -22,20 +23,24 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const loader: LoaderFunction = async ({ params }) => {
-  const routeData = await getSanityClient().fetch(
-    `*[_type == "route" ]
-        { _id,  slug, page -> {title}
+export const loader: LoaderFunction = async () => {
+  const { mainNavigation } = await getSanityClient().fetch(
+    `*[_id == "siteSettings" ][0]
+        {           
+          mainNavigation[] -> {
+            page -> {title}, 
+            slug { current}
+          }
       }`
   );
-  const routes = routeData.map(
+  const mainNav: NavItem[] = mainNavigation.map(
     (r: { page: { title: string }; slug: { current: string } }) => {
       return { name: r.page.title, to: r?.slug?.current ?? "/" };
     }
   );
 
   return {
-    routes,
+    mainNavigation: mainNav,
     ENV: {
       SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
       SANITY_DATASET: process.env.SANITY_DATASET,
@@ -44,7 +49,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export default function App() {
-  const { routes, ENV } = useLoaderData();
+  const { mainNavigation, ENV } = useLoaderData();
 
   return (
     <html lang="en">
@@ -53,7 +58,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Nav navigation={routes} />
+        <Nav navigation={mainNavigation} />
         <Outlet />
         <script
           dangerouslySetInnerHTML={{

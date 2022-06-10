@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { type FC } from "react";
+import { type NavItem } from "~/types";
 
 const Nav: FC<Props> = ({ navigation = [] }) => {
   return (
@@ -37,11 +38,6 @@ const Nav: FC<Props> = ({ navigation = [] }) => {
 
 interface Props {
   navigation?: NavItem[];
-}
-
-interface NavItem {
-  name: string;
-  to: string;
 }
 
 export default Nav;
