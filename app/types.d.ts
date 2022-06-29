@@ -64,7 +64,8 @@ export interface TextSectionContent extends BaseContent {
 
 export interface ContentPreview extends BaseContent {
   _type: "contentPreview";
-  query: string;
+  query: Query;
+  params: KeyValue[];
   parentRoute: RouteReference;
   data: Record<string, PreviewContent[]>;
 }
@@ -132,4 +133,28 @@ export type Color = {
 export interface NavItem {
   name: string;
   to: string;
+}
+
+export interface KeyValue {
+  key: string;
+  value: string;
+}
+
+export interface PageData {
+  page: {
+    title: string;
+    content: Content[];
+  };
+  slug: Slug;
+}
+
+export interface LoadableContent {
+  root: string;
+  query: Query;
+  params: KeyValue[];
+}
+
+export interface Query {
+  queryCode: { code: string };
+  queryParams: { key: string; optional: boolean };
 }

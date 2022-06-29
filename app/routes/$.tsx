@@ -2,7 +2,12 @@ import { type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Content } from "~/components";
 import { getSanityClient } from "~/lib";
-import { type ContentPreview, type Content as ContentItem } from "~/types";
+import type {
+  ContentPreview,
+  Content as ContentItem,
+  PageData,
+  LoadableContent,
+} from "~/types";
 
 const queryHelper = (
   paramValue: string | undefined
@@ -43,19 +48,18 @@ const queryHelper = (
   return { query, queryParams, isSubpage };
 };
 
-const previewQuery = `*[_type == "page" && parentRoute -> slug.current == $slug]
-        { title, 
-          slug         
-      }`;
+const isContentPreview = (item: unknown): item is ContentPreview => {
+  return (item as ContentPreview)._type === "contentPreview";
+};
 
-const loadableContent = (content: any): { root: string }[] => {
+const loadableContent = (content: ContentItem[]) => {
   if (!content) {
     return [];
   }
 
   return content
-    .filter((ci: ContentItem) => ci._type === "contentPreview")
-    .map((i: ContentPreview) => {
+    .filter((ci: ContentItem): ci is ContentPreview => isContentPreview(ci))
+    .map((i) => {
       return {
         root: i.parentRoute.slug.current,
         query: i.query,
@@ -64,29 +68,35 @@ const loadableContent = (content: any): { root: string }[] => {
     });
 };
 
+const isPage = (data: unknown): data is PageData => {
+  return (data as PageData).page !== undefined;
+};
+
 const getPageData = async (
   query: string,
   queryParams: Record<string, unknown>,
   isSubpage: boolean,
   preview = false
 ) => {
-  const data = await getSanityClient(preview).fetch(query, queryParams);
-  const pageData = isSubpage ? data : data.page;
+  const data = await getSanityClient(preview).fetch<
+    PageData | { content: ContentItem[] }
+  >(query, queryParams);
+
+  const pageData = isPage(data) ? data.page : data;
+
   const contentToLoad = loadableContent(pageData.content);
-  // console.log(contentToLoad);
   const previewData = await getPreviewContent(contentToLoad);
   return { pageData, previewData };
 };
 
 const getPreviewContent = async (
-  contentToLoad: { root: string }[],
+  contentToLoad: LoadableContent[],
   preview = false
 ) => {
   let previewContent;
   if (contentToLoad.length > 0) {
     const previewContentData = await Promise.all(
-      contentToLoad.map(async (toLoad: { root: string }) => {
-        console.log(toLoad.params);
+      contentToLoad.map(async (toLoad: LoadableContent) => {
         const d = await getSanityClient(preview).fetch(
           toLoad.query.queryCode.code,
           {
