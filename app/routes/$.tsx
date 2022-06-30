@@ -9,6 +9,21 @@ import type {
   LoadableContent,
 } from "~/types";
 
+const contentQuery = ` ...,
+            content[] {
+              ...,
+              parentRoute->,
+              query->,
+              cards[] {
+                ...,
+                cta {
+                  ...,
+                  route->
+                }
+              }             
+            }
+`;
+
 const queryHelper = (
   paramValue: string | undefined
 ): {
@@ -20,25 +35,15 @@ const queryHelper = (
     paramValue && paramValue?.split("/").length > 1 ? true : false;
   let query = `*[_type == "route" && slug.current == $slug][0]
         { ..., 
-          page ->{
-            ...,
-            content[] {
-              ...,
-              parentRoute ->,
-              query->
-            }
+          page->{
+            ${contentQuery}
           }
       }`;
   let queryParams = { slug: paramValue ?? "/" };
 
   if (isSubpage) {
     query = `*[_type == "page" && slug.current == $slug][0]
-        { ..., 
-          content[] {
-              ...,
-              parentRoute ->,
-              query->
-            }
+        {  ${contentQuery}
       }`;
     queryParams = {
       slug: paramValue?.split("/")[paramValue.split("/").length - 1] ?? "/",

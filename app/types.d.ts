@@ -113,16 +113,19 @@ export type Slug = {
 
 export type CTA = {
   title: string;
-  link: string;
+  link?: string;
+  route?: { slug: Slug };
   type?: "primary" | "secondary";
 };
 
 export type CardType = {
   _key: string;
   title: string;
-  text: string;
+  text: SanityBlockContent;
   cta: CTA;
   enabled: boolean;
+  fromColor?: string;
+  toColor?: string;
 };
 
 export type Color = {
