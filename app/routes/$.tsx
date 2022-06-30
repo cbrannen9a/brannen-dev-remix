@@ -2,7 +2,27 @@ import { type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Content } from "~/components";
 import { getSanityClient } from "~/lib";
-import { type ContentPreview, type Content as ContentItem } from "~/types";
+import type {
+  ContentPreview,
+  Content as ContentItem,
+  PageData,
+  LoadableContent,
+} from "~/types";
+
+const contentQuery = ` ...,
+            content[] {
+              ...,
+              parentRoute->,
+              query->,
+              cards[] {
+                ...,
+                cta {
+                  ...,
+                  route->
+                }
+              }             
+            }
+`;
 
 const queryHelper = (
   paramValue: string | undefined
@@ -15,23 +35,15 @@ const queryHelper = (
     paramValue && paramValue?.split("/").length > 1 ? true : false;
   let query = `*[_type == "route" && slug.current == $slug][0]
         { ..., 
-          page ->{
-            ...,
-            content[] {
-              ...,
-              parentRoute ->
-            }
+          page->{
+            ${contentQuery}
           }
       }`;
   let queryParams = { slug: paramValue ?? "/" };
 
   if (isSubpage) {
     query = `*[_type == "page" && slug.current == $slug][0]
-        { ..., 
-          content[] {
-              ...,
-              parentRoute ->
-            }
+        {  ${contentQuery}
       }`;
     queryParams = {
       slug: paramValue?.split("/")[paramValue.split("/").length - 1] ?? "/",
@@ -41,21 +53,28 @@ const queryHelper = (
   return { query, queryParams, isSubpage };
 };
 
-const previewQuery = `*[_type == "page" && parentRoute -> slug.current == $slug]
-        { title, 
-          slug         
-      }`;
+const isContentPreview = (item: unknown): item is ContentPreview => {
+  return (item as ContentPreview)._type === "contentPreview";
+};
 
-const loadableContent = (content: any): { root: string }[] => {
+const loadableContent = (content: ContentItem[]) => {
   if (!content) {
     return [];
   }
 
   return content
-    .filter((ci: ContentItem) => ci._type === "contentPreview")
-    .map((i: ContentPreview) => {
-      return { root: i.parentRoute.slug.current };
+    .filter((ci: ContentItem): ci is ContentPreview => isContentPreview(ci))
+    .map((i) => {
+      return {
+        root: i.parentRoute.slug.current,
+        query: i.query,
+        params: i.params,
+      };
     });
+};
+
+const isPage = (data: unknown): data is PageData => {
+  return (data as PageData).page !== undefined;
 };
 
 const getPageData = async (
@@ -64,24 +83,31 @@ const getPageData = async (
   isSubpage: boolean,
   preview = false
 ) => {
-  const data = await getSanityClient(preview).fetch(query, queryParams);
-  const pageData = isSubpage ? data : data.page;
+  const data = await getSanityClient(preview).fetch<
+    PageData | { content: ContentItem[] }
+  >(query, queryParams);
+
+  const pageData = isPage(data) ? data.page : data;
+
   const contentToLoad = loadableContent(pageData.content);
   const previewData = await getPreviewContent(contentToLoad);
   return { pageData, previewData };
 };
 
 const getPreviewContent = async (
-  contentToLoad: { root: string }[],
+  contentToLoad: LoadableContent[],
   preview = false
 ) => {
   let previewContent;
   if (contentToLoad.length > 0) {
     const previewContentData = await Promise.all(
-      contentToLoad.map(async (toLoad: { root: string }) => {
-        const d = await getSanityClient(preview).fetch(previewQuery, {
-          slug: toLoad.root,
-        });
+      contentToLoad.map(async (toLoad: LoadableContent) => {
+        const d = await getSanityClient(preview).fetch(
+          toLoad.query.queryCode.code,
+          {
+            slug: toLoad.root,
+          }
+        );
         return { [toLoad.root]: d };
       })
     );
