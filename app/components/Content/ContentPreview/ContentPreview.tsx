@@ -12,7 +12,10 @@ const ContentPreviewComponent: FC<
     <ul>
       {data[parentRoute.slug.current].map((d) => (
         <li key={d.title}>
-          <Link to={`${parentRoute.slug.current}/${d.slug.current}`}>
+          <Link
+            prefetch="intent"
+            to={`${parentRoute.slug.current}/${d.slug.current}`}
+          >
             {d.title}
           </Link>
         </li>

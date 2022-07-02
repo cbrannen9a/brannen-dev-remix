@@ -18,6 +18,7 @@ export const meta: MetaFunction = ({ data }: { data: any | undefined }) => {
   }
   return {
     title: `${data.pageData.title}`,
+    description: `${data.pageData.description}`,
   };
 };
 

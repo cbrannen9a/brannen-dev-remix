@@ -1,6 +1,7 @@
 import { PortableText } from "@portabletext/react";
 import { type FC } from "react";
 import urlBuilder from "@sanity/image-url";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   getImageDimensions,
   type SanityImageSource,
@@ -43,9 +44,20 @@ interface FigureComponentProps {
   isInline: boolean;
 }
 
+const CodeBlock: FC<{ value: { language: string; code: string } }> = ({
+  value,
+}) => {
+  return (
+    <SyntaxHighlighter language={value.language}>
+      {value.code}
+    </SyntaxHighlighter>
+  );
+};
+
 const components = {
   types: {
     figure: FigureComponent,
+    code: CodeBlock,
     // Any other custom types you have in your content
     // Examples: mapLocation, contactForm, code, featuredProjects, latestNews, etc.
   },
