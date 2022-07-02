@@ -17,19 +17,26 @@ export function links() {
   return [{ rel: "stylesheet", href: styles }];
 }
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "New Remix App",
-  viewport: "width=device-width,initial-scale=1",
-});
+export const meta: MetaFunction = ({ data }) => {
+  return {
+    title: `${data?.title}`,
+    charset: "utf-8",
+    viewport: "width=device-width,initial-scale=1",
+  };
+};
 
 export const loader: LoaderFunction = async () => {
-  const { mainNavigation } = await getSanityClient().fetch(
+  const { mainNavigation, title, logo } = await getSanityClient().fetch(
     `*[_id == "siteSettings" ][0]
-        {           
+        {
+          ...,           
           mainNavigation[] -> {
             page -> {title}, 
             slug { current}
+          },
+          logo {
+            ...,
+            asset->
           }
       }`
   );
@@ -41,6 +48,8 @@ export const loader: LoaderFunction = async () => {
 
   return {
     mainNavigation: mainNav,
+    title,
+    logo,
     ENV: {
       SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
       SANITY_DATASET: process.env.SANITY_DATASET,
@@ -49,7 +58,7 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function App() {
-  const { mainNavigation, ENV } = useLoaderData();
+  const { mainNavigation, ENV, logo } = useLoaderData();
 
   return (
     <html lang="en">
@@ -58,7 +67,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Nav navigation={mainNavigation} />
+        <Nav navigation={mainNavigation} logo={logo} />
         <Outlet />
         <script
           dangerouslySetInnerHTML={{
