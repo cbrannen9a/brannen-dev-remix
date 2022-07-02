@@ -1,11 +1,13 @@
+import { SanityImageAsset } from "@sanity/asset-utils";
+
 export type ContentTypes =
   | "hero"
   | "cards"
   | "banner"
-  | "social"
   | "textSection"
   | "contentPreview"
-  | "route";
+  | "route"
+  | "tags";
 
 export interface BaseEntity {
   _id: string;
@@ -45,16 +47,21 @@ export interface BannerContent extends BaseContent {
   subHeading: string;
 }
 
-export interface SocialContent extends BaseContent {
-  _type: "social";
-  social: SocialLink[];
+export interface TagsContent extends BaseContent {
+  _type: "tags";
+  tags: Tag[];
+  as: "tags" | "chips";
+  ariaLabel: string;
+  title?: string;
 }
 
-export type SocialLink = {
-  link: string;
+export interface Tag extends BaseContent {
   title: string;
-  _key: string;
-};
+  description?: SanityBlockContent;
+  link?: string;
+  route?: { slug: Slug };
+  media?: SanityImageAsset;
+}
 
 export interface TextSectionContent extends BaseContent {
   _type: "textSection";
@@ -76,15 +83,18 @@ export interface RouteReference extends BaseContent {
 }
 
 export interface PreviewContent {
+  _id: string;
   title: string;
   slug: Slug;
+  description: SanityBlockContent;
+  openGraphImage: SanityImageAsset;
 }
 
 export type Content =
   | HeroContent
   | CardsContent
   | BannerContent
-  | SocialContent
+  | TagsContent
   | TextSectionContent
   | ContentPreview
   | RouteReference;

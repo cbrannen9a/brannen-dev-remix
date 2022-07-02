@@ -5,7 +5,7 @@ import Cards from "./Cards";
 import ContentPreview from "./ContentPreview";
 import Hero from "./Hero";
 import { SanityContextProvider } from "./SanityContext";
-import Social from "./Social";
+import Tags from "./Tags";
 import TextSection from "./TextSection";
 
 const ContentComponent: FC<Props> = ({
@@ -31,8 +31,8 @@ const ContentComponent: FC<Props> = ({
             return <Cards key={item._key} {...item} />;
           case "banner":
             return <Banner key={item._key} {...item} />;
-          case "social":
-            return <Social key={item._key} {...item} />;
+          case "tags":
+            return <Tags key={item._key} {...item} />;
           case "textSection":
             return <TextSection key={item._key} {...item} />;
           case "contentPreview":

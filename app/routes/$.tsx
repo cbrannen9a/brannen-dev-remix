@@ -1,3 +1,4 @@
+import { toPlainText } from "@portabletext/react";
 import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Content } from "~/components";
@@ -18,7 +19,9 @@ export const meta: MetaFunction = ({ data }: { data: any | undefined }) => {
   }
   return {
     title: `${data.pageData.title}`,
-    description: `${data.pageData.description}`,
+    description: `${
+      data.pageData.description ? toPlainText(data.pageData.description) : ""
+    }`,
   };
 };
 
@@ -33,7 +36,15 @@ const contentQuery = ` ...,
                   ...,
                   route->
                 }
-              }             
+              },
+              tags[] {
+                ...,
+                route->,
+                media {
+                  asset->
+                }
+              }
+
             }
 `;
 
