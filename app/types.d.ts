@@ -1,4 +1,4 @@
-import { SanityImageAsset } from "@sanity/asset-utils";
+import { type SanityImageAsset } from "@sanity/asset-utils";
 
 export type ContentTypes =
   | "hero"
