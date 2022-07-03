@@ -1,4 +1,5 @@
-import { type LoaderFunction } from "@remix-run/node";
+import { toPlainText } from "@portabletext/react";
+import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Content } from "~/components";
 import { getSanityClient } from "~/lib";
@@ -8,6 +9,21 @@ import type {
   PageData,
   LoadableContent,
 } from "~/types";
+
+export const meta: MetaFunction = ({ data }: { data: any | undefined }) => {
+  if (!data) {
+    return {
+      title: "No title",
+      description: "No description found",
+    };
+  }
+  return {
+    title: `${data.pageData.title}`,
+    description: `${
+      data.pageData.description ? toPlainText(data.pageData.description) : ""
+    }`,
+  };
+};
 
 const contentQuery = ` ...,
             content[] {
@@ -20,7 +36,15 @@ const contentQuery = ` ...,
                   ...,
                   route->
                 }
-              }             
+              },
+              tags[] {
+                ...,
+                route->,
+                media {
+                  asset->
+                }
+              }
+
             }
 `;
 

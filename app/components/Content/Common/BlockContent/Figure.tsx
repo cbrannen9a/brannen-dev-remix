@@ -1,14 +1,14 @@
-import { PortableText } from "@portabletext/react";
 import { type FC } from "react";
 import urlBuilder from "@sanity/image-url";
+
 import {
   getImageDimensions,
   type SanityImageSource,
 } from "@sanity/asset-utils";
-import { type SanityBlockContent } from "~/types";
-import { useSanityContext } from "../SanityContext";
 
-const FigureComponent = ({ value, isInline }: FigureComponentProps) => {
+import { useSanityContext } from "../../SanityContext";
+
+const Figure: FC<Props> = ({ value, isInline }) => {
   const { sanityDataset, sanityProjectId } = useSanityContext();
   const { width, height } = getImageDimensions(value);
 
@@ -38,21 +38,9 @@ const FigureComponent = ({ value, isInline }: FigureComponentProps) => {
   );
 };
 
-interface FigureComponentProps {
+interface Props {
   value: SanityImageSource;
   isInline: boolean;
 }
 
-const components = {
-  types: {
-    figure: FigureComponent,
-    // Any other custom types you have in your content
-    // Examples: mapLocation, contactForm, code, featuredProjects, latestNews, etc.
-  },
-};
-
-const BlockContent: FC<{ text: SanityBlockContent }> = ({ text }) => (
-  <PortableText value={text} components={components} />
-);
-
-export default BlockContent;
+export default Figure;
