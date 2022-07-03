@@ -5,6 +5,7 @@ import {
   type SanityImageSource,
 } from "@sanity/asset-utils";
 import { useSanityContext } from "../SanityContext";
+import { type FitMode } from "@sanity/image-url/lib/types/types";
 
 const Image: FC<Props> = ({
   className,
@@ -14,6 +15,7 @@ const Image: FC<Props> = ({
   width,
   height,
   loading = "lazy",
+  fit = "max",
 }) => {
   const { sanityDataset, sanityProjectId } = useSanityContext();
   const { width: imageWidth, height: imageHeight } = getImageDimensions(value);
@@ -29,7 +31,7 @@ const Image: FC<Props> = ({
         .image(value)
         .width(width ?? imageWidth)
         .height(height ?? imageHeight)
-        .fit("max")
+        .fit(fit)
         .auto("format")
         .url()}
       alt={alt || (value as { alt?: string })?.alt || " "}
@@ -48,13 +50,14 @@ const Image: FC<Props> = ({
 };
 
 interface Props {
-  className: string;
+  className?: string;
   value: SanityImageSource;
   isInline?: boolean;
   alt: string;
   loading?: "lazy" | "eager";
   width?: number;
   height?: number;
+  fit?: FitMode;
 }
 
 export default Image;

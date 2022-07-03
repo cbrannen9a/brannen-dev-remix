@@ -5,7 +5,7 @@ import Tag from "./Tag";
 
 const Tags: FC<Pick<TagsContent, "tags" | "as" | "ariaLabel" | "title">> = ({
   tags,
-  as,
+  as = "tags",
   ariaLabel,
   title,
 }) => {
@@ -16,7 +16,7 @@ const Tags: FC<Pick<TagsContent, "tags" | "as" | "ariaLabel" | "title">> = ({
           <div className="max-w-7xl mx-auto relative bg-white overflow-hidden">
             <div className="relative px-8 bg-white lg:max-w-2xl lg:w-full ">
               {title ? <h2>{title}</h2> : null}
-              <ul className="mx-3.5 flex flex-row flex-wrap justify-start md:mb-4 md:px-10 md:max-w-2xl lg:mb-5 list-none  relative bg-white overflow-hidden">
+              <ul className="flex flex-row flex-wrap justify-start list-none  relative bg-white overflow-hidden">
                 {tags.map((chip) => (
                   <Chip key={chip._key} {...chip} />
                 ))}
@@ -28,11 +28,11 @@ const Tags: FC<Pick<TagsContent, "tags" | "as" | "ariaLabel" | "title">> = ({
     case "tags":
     default:
       return (
-        <>
+        <ul className="h-8 min-h-full flex flex-row flex-wrap justify-start list-none  relative bg-white overflow-hidden">
           {tags.map((tag) => (
             <Tag key={tag._key} {...tag} />
           ))}
-        </>
+        </ul>
       );
   }
 };

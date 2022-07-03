@@ -50,12 +50,13 @@ export interface BannerContent extends BaseContent {
 export interface TagsContent extends BaseContent {
   _type: "tags";
   tags: Tag[];
-  as: "tags" | "chips";
+  as?: "tags" | "chips";
   ariaLabel: string;
   title?: string;
 }
 
-export interface Tag extends BaseContent {
+export interface Tag {
+  _key: string;
   title: string;
   description?: SanityBlockContent;
   link?: string;
@@ -86,8 +87,9 @@ export interface PreviewContent {
   _id: string;
   title: string;
   slug: Slug;
-  description: SanityBlockContent;
-  openGraphImage: SanityImageAsset;
+  description?: SanityBlockContent;
+  openGraphImage?: SanityImageAsset;
+  keywords?: string[];
 }
 
 export type Content =
