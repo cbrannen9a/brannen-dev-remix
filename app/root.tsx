@@ -25,20 +25,20 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export const loader: LoaderFunction = async () => {
-  const { mainNavigation, title, logo } = await getSanityClient().fetch(
-    `*[_id == "siteSettings" ][0]
-        {
-          ...,           
-          mainNavigation[] -> {
-            page -> {title}, 
-            slug { current}
-          },
-          logo {
-            ...,
-            asset->
-          }
-      }`
+export const loader: LoaderFunction = async ({ context }) => {
+  console.log(context);
+  const { title, siteSettingsQuery, pageQuery, subPageQuery } =
+    await getSanityClient().fetch(
+      `*[_id == "siteSettings"][0]{
+          title,
+          pageQuery->,
+          siteSettingsQuery->,
+          subPageQuery->          
+        }`
+    );
+
+  const { mainNavigation, logo } = await getSanityClient().fetch(
+    siteSettingsQuery.queryCode.code
   );
   const mainNav: NavItem[] = mainNavigation.map(
     (r: { page: { title: string }; slug: { current: string } }) => {
@@ -54,11 +54,14 @@ export const loader: LoaderFunction = async () => {
       SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
       SANITY_DATASET: process.env.SANITY_DATASET,
     },
+    pageQuery,
+    subPageQuery,
   };
 };
 
 export default function App() {
-  const { mainNavigation, ENV, logo } = useLoaderData();
+  const { mainNavigation, ENV, logo, pageQuery, subPageQuery, title } =
+    useLoaderData();
 
   return (
     <html lang="en">
@@ -68,7 +71,7 @@ export default function App() {
       </head>
       <body>
         <Nav navigation={mainNavigation} logo={logo} />
-        <Outlet />
+        <Outlet context={{ pageQuery, subPageQuery, title }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(ENV)}`,

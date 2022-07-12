@@ -89,7 +89,7 @@ export interface PreviewContent {
   slug: Slug;
   description?: SanityBlockContent;
   openGraphImage?: SanityImageAsset;
-  keywords?: string[];
+  previewTags?: { tags: Tag[] }[];
 }
 
 export type Content =
