@@ -1,10 +1,11 @@
 import { type FC } from "react";
+import { SanityContextProvider } from "~/contexts";
 import { type PreviewContent, type Content } from "~/types";
 import Banner from "./Banner";
 import Cards from "./Cards";
 import ContentPreview from "./ContentPreview";
 import Hero from "./Hero";
-import { SanityContextProvider } from "./SanityContext";
+
 import Tags from "./Tags";
 import TextSection from "./TextSection";
 

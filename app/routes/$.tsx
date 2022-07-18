@@ -1,18 +1,12 @@
 import { toPlainText } from "@portabletext/react";
 import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { Content } from "~/components";
 
-import { getPageData, getSiteData, queryHelper } from "~/lib";
+import { getPageData, queryHelper } from "~/lib";
 
-export const meta: MetaFunction = ({
-  data: { pageData },
-  parentsData,
-}: {
-  data: any | undefined;
-  parentsData: { root: { title: string } };
-}) => {
-  console.log(parentsData);
+export const meta: MetaFunction = ({ data, parentsData }) => {
+  const { pageData } = data;
   if (!pageData) {
     return {
       title: `${parentsData?.root.title} | No title`,
@@ -45,12 +39,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     preview
   );
 
-  const { title } = await getSiteData();
-
   return {
     pageData,
     previewData,
-    title,
     sanityProjectId: process.env.SANITY_PROJECT_ID,
     sanityDataset: process.env.SANITY_DATASET,
   };
@@ -66,8 +57,6 @@ export const ErrorBoundary = () => {
 };
 
 export default function Body() {
-  const context = useOutletContext();
-  // console.log(context);
   const { pageData, previewData, sanityDataset, sanityProjectId } =
     useLoaderData();
 

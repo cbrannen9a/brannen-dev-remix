@@ -122,14 +122,3 @@ const getPreviewContent = async (
   }
   return previewContent;
 };
-
-export const getSiteData = async () => {
-  const data = await getSanityClient().fetch<{
-    title: string;
-  }>(`*[_id == "siteSettings" ][0]
-        {           
-         title         
-      }`);
-
-  return data;
-};

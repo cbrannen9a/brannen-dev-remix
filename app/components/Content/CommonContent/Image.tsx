@@ -4,8 +4,8 @@ import {
   getImageDimensions,
   type SanityImageSource,
 } from "@sanity/asset-utils";
-import { useSanityContext } from "../SanityContext";
 import { type FitMode } from "@sanity/image-url/lib/types/types";
+import { useSanityContext } from "~/contexts";
 
 const Image: FC<Props> = ({
   className,

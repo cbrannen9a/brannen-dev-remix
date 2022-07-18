@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import { type Tag } from "~/types";
-import { Image } from "../../Common";
+import { Image } from "../../CommonContent";
 
 const TagMedia: FC<Pick<Tag, "media" | "title">> = ({ media, title }) =>
   media ? (

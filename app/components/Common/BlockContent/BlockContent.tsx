@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import { PortableText } from "@portabletext/react";
-import { type SanityBlockContent } from "~/types";
+import { type PortableTextBlock } from "@portabletext/types";
 
 import CodeBlock from "./CodeBlock";
 import Figure from "./Figure";
@@ -12,7 +12,7 @@ const components = {
   },
 };
 
-const BlockContent: FC<{ text: SanityBlockContent }> = ({ text }) => (
+const BlockContent: FC<{ text: PortableTextBlock[] }> = ({ text }) => (
   <PortableText value={text} components={components} />
 );
 

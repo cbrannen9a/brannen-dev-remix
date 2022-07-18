@@ -2,7 +2,7 @@ import type { HeroContent } from "~/types";
 import { type FC } from "react";
 
 import { PortableText } from "@portabletext/react";
-import { Ctas, Image } from "../Common";
+import { Ctas, Image } from "../CommonContent";
 
 const Hero: FC<
   Pick<HeroContent, "heading" | "subHeading" | "tagline" | "ctas" | "image">

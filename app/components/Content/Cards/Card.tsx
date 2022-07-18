@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { BlockContent } from "../Common";
+import { BlockContent } from "../../Common";
 import { type CardType } from "~/types";
 
 const Card: FC<CardType> = ({
