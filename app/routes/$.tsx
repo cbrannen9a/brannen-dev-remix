@@ -1,9 +1,10 @@
 import { toPlainText } from "@portabletext/react";
 import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Content } from "~/components";
 
 import { getPageData, queryHelper } from "~/lib";
+import { type Colors } from "~/types";
 
 export const meta: MetaFunction = ({ data, parentsData }) => {
   const { pageData } = data;
@@ -59,10 +60,12 @@ export const ErrorBoundary = () => {
 export default function Body() {
   const { pageData, previewData, sanityDataset, sanityProjectId } =
     useLoaderData();
+  const { colors } = useOutletContext<{ colors: Colors }>();
 
   return pageData ? (
     <Content
       content={pageData.content}
+      colors={colors}
       previewContent={previewData}
       sanityDataset={sanityDataset}
       sanityProjectId={sanityProjectId}

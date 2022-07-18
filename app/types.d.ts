@@ -1,4 +1,4 @@
-import { PortableTextBlock } from "@portabletext/types";
+import { type PortableTextBlock } from "@portabletext/types";
 import { type SanityImageAsset } from "@sanity/asset-utils";
 
 export type ContentTypes =
@@ -6,6 +6,7 @@ export type ContentTypes =
   | "cards"
   | "banner"
   | "textSection"
+  | "imageSection"
   | "contentPreview"
   | "route"
   | "tags";
@@ -84,6 +85,15 @@ export interface RouteReference extends BaseContent {
   slug: Slug;
 }
 
+export interface ImageSectionContent extends BaseContent {
+  _type: "imageSection";
+  label: string;
+  heading: string;
+  text: PortableTextBlock[];
+  image: { alt?: string; asset: SanityImageAsset; caption?: string };
+  cta?: CTA;
+}
+
 export interface PreviewContent {
   _id: string;
   title: string;
@@ -99,6 +109,7 @@ export type Content =
   | BannerContent
   | TagsContent
   | TextSectionContent
+  | ImageSectionContent
   | ContentPreview
   | RouteReference;
 
@@ -124,11 +135,25 @@ export type CardType = {
   toColor?: string;
 };
 
-export type Color = {
-  color: string;
-  hue: string;
+type Color = {
+  hex: string;
 };
 
+export interface Colors {
+  primary: Color;
+  primaryText: Color;
+  primaryLight: Color;
+  primaryLightText: Color;
+  primaryDark: Color;
+  primaryDarkText: Color;
+  secondary: Color;
+  secondaryText: Color;
+  secondaryLight: Color;
+  secondaryLightText: Color;
+  secondaryDark: Color;
+  secondaryDarkText: Color;
+  background: Color;
+}
 export interface NavItem {
   name: string;
   to: string;

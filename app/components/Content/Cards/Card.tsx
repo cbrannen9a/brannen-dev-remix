@@ -20,7 +20,7 @@ const Card: FC<CardType> = ({
           !enabled ? `from-gray-700 to-gray-500` : `${fromColor} ${toColor}`
         } `}
       >
-        <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
+        <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative p-6 xl:p-8">
           <h2 className="text-xl font-semibold mb-2 text-shadow">{title}</h2>
           <div className="font-medium text-violet-100 text-shadow mb-4">
             <BlockContent text={text} />

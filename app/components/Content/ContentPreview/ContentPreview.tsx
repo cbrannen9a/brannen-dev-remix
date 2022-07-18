@@ -37,7 +37,7 @@ const ContentPreviewComponent: FC<
                 prefetch="intent"
                 to={`${parentRoute.slug.current}/${slug.current}`}
               >
-                <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
+                <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative p-6 xl:p-8">
                   {openGraphImage ? (
                     <Image
                       className="max-w-sm m-auto"

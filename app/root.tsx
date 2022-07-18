@@ -8,10 +8,10 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { Nav } from "./components";
+import { Footer, Nav } from "./components";
 import { getSanityClient } from "./lib";
 import styles from "./styles/tailwind.css";
-import { type NavItem } from "./types";
+import { Colors, type NavItem } from "./types";
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
@@ -26,7 +26,6 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export const loader: LoaderFunction = async ({ context }) => {
-  console.log(context);
   const { title, siteSettingsQuery, pageQuery, subPageQuery } =
     await getSanityClient().fetch(
       `*[_id == "siteSettings"][0]{
@@ -37,14 +36,44 @@ export const loader: LoaderFunction = async ({ context }) => {
         }`
     );
 
-  const { mainNavigation, logo } = await getSanityClient().fetch(
-    siteSettingsQuery.queryCode.code
-  );
+  const {
+    mainNavigation,
+    logo,
+    primary,
+    primaryText,
+    primaryLight,
+    primaryLightText,
+    primaryDark,
+    primaryDarkText,
+    secondary,
+    secondaryText,
+    secondaryLight,
+    secondaryLightText,
+    secondaryDark,
+    secondaryDarkText,
+    background,
+  } = await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
   const mainNav: NavItem[] = mainNavigation.map(
     (r: { page: { title: string }; slug: { current: string } }) => {
       return { name: r.page.title, to: r?.slug?.current ?? "/" };
     }
   );
+
+  const colors: Colors = {
+    primary,
+    primaryText,
+    primaryLight,
+    primaryLightText,
+    primaryDark,
+    primaryDarkText,
+    secondary,
+    secondaryText,
+    secondaryLight,
+    secondaryLightText,
+    secondaryDark,
+    secondaryDarkText,
+    background,
+  };
 
   return {
     mainNavigation: mainNav,
@@ -56,11 +85,12 @@ export const loader: LoaderFunction = async ({ context }) => {
     },
     pageQuery,
     subPageQuery,
+    colors,
   };
 };
 
 export default function App() {
-  const { mainNavigation, ENV, logo, pageQuery, subPageQuery, title } =
+  const { mainNavigation, ENV, logo, pageQuery, subPageQuery, title, colors } =
     useLoaderData();
 
   return (
@@ -70,8 +100,14 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Nav navigation={mainNavigation} logo={logo} />
-        <Outlet context={{ pageQuery, subPageQuery, title }} />
+        <Nav
+          navigation={mainNavigation}
+          logo={logo}
+          siteTitle={title}
+          colors={colors}
+        />
+        <Outlet context={{ pageQuery, subPageQuery, title, colors }} />
+        {/* <Footer/> */}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(ENV)}`,
