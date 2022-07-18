@@ -1,12 +1,10 @@
 import { type FC } from "react";
 import urlBuilder from "@sanity/image-url";
-
 import {
   getImageDimensions,
   type SanityImageSource,
 } from "@sanity/asset-utils";
-
-import { useSanityContext } from "../../SanityContext";
+import { useSanityContext } from "~/contexts";
 
 const Figure: FC<Props> = ({ value, isInline }) => {
   const { sanityDataset, sanityProjectId } = useSanityContext();

@@ -1,3 +1,4 @@
+import { type PortableTextBlock } from "@portabletext/types";
 import { type SanityImageAsset } from "@sanity/asset-utils";
 
 export type ContentTypes =
@@ -5,6 +6,7 @@ export type ContentTypes =
   | "cards"
   | "banner"
   | "textSection"
+  | "imageSection"
   | "contentPreview"
   | "route"
   | "tags";
@@ -24,7 +26,7 @@ export interface HeroContent extends BaseContent {
   heading: string;
   subHeading: string;
   label: string;
-  tagline: SanityBlockContent;
+  tagline: PortableTextBlock[];
   image: {
     alt: string;
     asset: {
@@ -58,7 +60,7 @@ export interface TagsContent extends BaseContent {
 export interface Tag {
   _key: string;
   title: string;
-  description?: SanityBlockContent;
+  description?: PortableTextBlock[];
   link?: string;
   route?: { slug: Slug };
   media?: SanityImageAsset;
@@ -67,7 +69,7 @@ export interface Tag {
 export interface TextSectionContent extends BaseContent {
   _type: "textSection";
   heading: string;
-  text: SanityBlockContent;
+  text: PortableTextBlock[];
 }
 
 export interface ContentPreview extends BaseContent {
@@ -83,13 +85,22 @@ export interface RouteReference extends BaseContent {
   slug: Slug;
 }
 
+export interface ImageSectionContent extends BaseContent {
+  _type: "imageSection";
+  label: string;
+  heading: string;
+  text: PortableTextBlock[];
+  image: { alt?: string; asset: SanityImageAsset; caption?: string };
+  cta?: CTA;
+}
+
 export interface PreviewContent {
   _id: string;
   title: string;
   slug: Slug;
-  description?: SanityBlockContent;
+  description?: PortableTextBlock[];
   openGraphImage?: SanityImageAsset;
-  keywords?: string[];
+  previewTags?: { tags: Tag[] }[];
 }
 
 export type Content =
@@ -98,25 +109,9 @@ export type Content =
   | BannerContent
   | TagsContent
   | TextSectionContent
+  | ImageSectionContent
   | ContentPreview
   | RouteReference;
-
-export type SanityBlockContent = BlockContent[];
-
-export type BlockContent = {
-  _key: string;
-  _type: string;
-  children: BlockContentChildren[];
-  markDefs: [];
-  style: string;
-};
-
-export type BlockContentChildren = {
-  _key: string;
-  _type: string;
-  marks: [];
-  text: string;
-};
 
 export type Slug = {
   _type: "slug";
@@ -133,18 +128,32 @@ export type CTA = {
 export type CardType = {
   _key: string;
   title: string;
-  text: SanityBlockContent;
+  text: PortableTextBlock[];
   cta: CTA;
   enabled: boolean;
   fromColor?: string;
   toColor?: string;
 };
 
-export type Color = {
-  color: string;
-  hue: string;
+type Color = {
+  hex: string;
 };
 
+export interface Colors {
+  primary: Color;
+  primaryText: Color;
+  primaryLight: Color;
+  primaryLightText: Color;
+  primaryDark: Color;
+  primaryDarkText: Color;
+  secondary: Color;
+  secondaryText: Color;
+  secondaryLight: Color;
+  secondaryLightText: Color;
+  secondaryDark: Color;
+  secondaryDarkText: Color;
+  background: Color;
+}
 export interface NavItem {
   name: string;
   to: string;

@@ -4,6 +4,5 @@ export {
   usePreviewSubscription,
   config,
   getPageData,
-  getSiteData,
   queryHelper,
 } from "./sanity";

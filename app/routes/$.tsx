@@ -1,29 +1,27 @@
 import { toPlainText } from "@portabletext/react";
 import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Content } from "~/components";
 
-import { getPageData, getSiteData, queryHelper } from "~/lib";
+import { getPageData, queryHelper } from "~/lib";
+import { type Colors } from "~/types";
 
-export const meta: MetaFunction = ({ data }: { data: any | undefined }) => {
-  if (!data) {
+export const meta: MetaFunction = ({ data, parentsData }) => {
+  const { pageData } = data;
+  if (!pageData) {
     return {
-      title: "No title",
+      title: `${parentsData?.root.title} | No title`,
       description: "No description found",
     };
   }
   return {
-    title: `${data?.title} | ${data.pageData.title}`,
+    title: `${parentsData?.root.title} | ${pageData.title}`,
     description: `${
-      data.pageData.description ? toPlainText(data.pageData.description) : ""
+      pageData.description ? toPlainText(pageData.description) : ""
     }`,
-    keywords: `${
-      data?.pageData?.keywords ? data.pageData.keywords?.join(",") : ""
-    }`,
+    keywords: `${pageData?.keywords ? pageData.keywords?.join(",") : ""}`,
     "og:image": `${
-      data?.pageData?.openGraphImage
-        ? data?.pageData?.openGraphImage.asset.url
-        : ""
+      pageData?.openGraphImage ? pageData?.openGraphImage.asset.url : ""
     }`,
   };
 };
@@ -42,12 +40,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     preview
   );
 
-  const { title } = await getSiteData();
-
   return {
     pageData,
     previewData,
-    title,
     sanityProjectId: process.env.SANITY_PROJECT_ID,
     sanityDataset: process.env.SANITY_DATASET,
   };
@@ -65,10 +60,12 @@ export const ErrorBoundary = () => {
 export default function Body() {
   const { pageData, previewData, sanityDataset, sanityProjectId } =
     useLoaderData();
+  const { colors } = useOutletContext<{ colors: Colors }>();
 
   return pageData ? (
     <Content
       content={pageData.content}
+      colors={colors}
       previewContent={previewData}
       sanityDataset={sanityDataset}
       sanityProjectId={sanityProjectId}

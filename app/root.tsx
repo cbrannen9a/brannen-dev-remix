@@ -8,10 +8,10 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { Nav } from "./components";
+import { Footer, Nav } from "./components";
 import { getSanityClient } from "./lib";
 import styles from "./styles/tailwind.css";
-import { type NavItem } from "./types";
+import { type Colors, type NavItem } from "./types";
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
@@ -25,40 +25,97 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export const loader: LoaderFunction = async () => {
-  const { mainNavigation, title, logo } = await getSanityClient().fetch(
-    `*[_id == "siteSettings" ][0]
-        {
-          ...,           
-          mainNavigation[] -> {
-            page -> {title}, 
-            slug { current}
-          },
-          logo {
-            ...,
-            asset->
-          }
-      }`
-  );
-  const mainNav: NavItem[] = mainNavigation.map(
-    (r: { page: { title: string }; slug: { current: string } }) => {
-      return { name: r.page.title, to: r?.slug?.current ?? "/" };
-    }
-  );
+export const loader: LoaderFunction = async ({ context }) => {
+  const { title, siteSettingsQuery, pageQuery, subPageQuery } =
+    await getSanityClient().fetch(
+      `*[_id == "siteSettings"][0]{
+          title,
+          pageQuery->,
+          siteSettingsQuery->,
+          subPageQuery->          
+        }`
+    );
+
+  const {
+    mainNavigation,
+    footerNavigation,
+    footerText,
+    logo,
+    primary,
+    primaryText,
+    primaryLight,
+    primaryLightText,
+    primaryDark,
+    primaryDarkText,
+    secondary,
+    secondaryText,
+    secondaryLight,
+    secondaryLightText,
+    secondaryDark,
+    secondaryDarkText,
+    background,
+  } = await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
+
+  const mainNav: NavItem[] = mainNavigation
+    ? mainNavigation.map(
+        (r: { page: { title: string }; slug: { current: string } }) => {
+          return { name: r.page.title, to: r?.slug?.current ?? "/" };
+        }
+      )
+    : [];
+
+  const footerNav: NavItem[] = footerNavigation
+    ? footerNavigation.map(
+        (r: { page: { title: string }; slug: { current: string } }) => {
+          return { name: r.page.title, to: r?.slug?.current ?? "/" };
+        }
+      )
+    : [];
+
+  const colors: Colors = {
+    primary,
+    primaryText,
+    primaryLight,
+    primaryLightText,
+    primaryDark,
+    primaryDarkText,
+    secondary,
+    secondaryText,
+    secondaryLight,
+    secondaryLightText,
+    secondaryDark,
+    secondaryDarkText,
+    background,
+  };
 
   return {
     mainNavigation: mainNav,
+    footerNavigation: footerNav,
+    footerText,
     title,
     logo,
     ENV: {
       SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
       SANITY_DATASET: process.env.SANITY_DATASET,
     },
+    pageQuery,
+    subPageQuery,
+    colors,
   };
 };
 
 export default function App() {
-  const { mainNavigation, ENV, logo } = useLoaderData();
+  const {
+    mainNavigation,
+    footerNavigation,
+    footerText,
+    ENV,
+    logo,
+    pageQuery,
+    subPageQuery,
+    title,
+    colors,
+  } = useLoaderData();
 
   return (
     <html lang="en">
@@ -67,8 +124,18 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Nav navigation={mainNavigation} logo={logo} />
-        <Outlet />
+        <Nav
+          navigation={mainNavigation}
+          logo={logo}
+          siteTitle={title}
+          colors={colors}
+        />
+        <Outlet context={{ pageQuery, subPageQuery, title, colors }} />
+        <Footer
+          navigation={footerNavigation}
+          siteTitle={title}
+          footerText={footerText}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(ENV)}`,
