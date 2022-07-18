@@ -26,28 +26,34 @@ const ContentComponent: FC<Props> = ({
       sanityDataset={sanityDataset}
       sanityProjectId={sanityProjectId}
     >
-      {content.map((item) => {
-        switch (item._type) {
-          case "hero":
-            return <Hero key={item._key} colors={colors} {...item} />;
-          case "cards":
-            return <Cards key={item._key} {...item} />;
-          case "banner":
-            return <Banner key={item._key} colors={colors} {...item} />;
-          case "tags":
-            return <Tags key={item._key} {...item} />;
-          case "textSection":
-            return <TextSection key={item._key} {...item} />;
-          case "imageSection":
-            return <ImageSection key={item._key} {...item} />;
-          case "contentPreview":
-            return (
-              <ContentPreview key={item._key} {...item} data={previewContent} />
-            );
-          default:
-            return null;
-        }
-      })}
+      <div className="min-h-screen">
+        {content.map((item) => {
+          switch (item._type) {
+            case "hero":
+              return <Hero key={item._key} colors={colors} {...item} />;
+            case "cards":
+              return <Cards key={item._key} {...item} />;
+            case "banner":
+              return <Banner key={item._key} colors={colors} {...item} />;
+            case "tags":
+              return <Tags key={item._key} {...item} />;
+            case "textSection":
+              return <TextSection key={item._key} {...item} />;
+            case "imageSection":
+              return <ImageSection key={item._key} {...item} />;
+            case "contentPreview":
+              return (
+                <ContentPreview
+                  key={item._key}
+                  {...item}
+                  data={previewContent}
+                />
+              );
+            default:
+              return null;
+          }
+        })}
+      </div>
     </SanityContextProvider>
   );
 };

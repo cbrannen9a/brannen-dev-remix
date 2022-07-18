@@ -7,7 +7,7 @@ import { type NavItem } from "~/types";
 
 const Footer: FC<Props> = ({
   siteTitle,
-  footerNav,
+  navigation,
   footerText,
   copyrightText,
   copyrightLink,
@@ -146,19 +146,20 @@ const Footer: FC<Props> = ({
             <h6 className="uppercase font-semibold mb-4 flex justify-center md:justify-start">
               Useful links
             </h6>
-            {footerNav.map((item) => (
-              <Link className="mb-4" key={item.name} to={item.to}>
-                {item.name}
-              </Link>
+
+            {navigation.map((item) => (
+              <p key={item.name} className="mb-4">
+                <Link className="mb-4" key={item.name} to={item.to}>
+                  {item.name}
+                </Link>
+              </p>
             ))}
           </div>
         </div>
       </div>
+
       <div className="text-center p-6 bg-gray-200">
-        <span>© {new Date().getFullYear()} Copyright: </span>
-        <a className="text-gray-600 font-semibold" href={copyrightLink.href}>
-          {copyrightText}
-        </a>
+        <span>© {new Date().getFullYear()} Copyright </span>
       </div>
     </footer>
   );
@@ -166,7 +167,7 @@ const Footer: FC<Props> = ({
 
 interface Props {
   siteTitle: string;
-  footerNav: NavItem[];
+  navigation: NavItem[];
   footerText: PortableTextBlock[];
   copyrightText: string;
   copyrightLink: { href: string };

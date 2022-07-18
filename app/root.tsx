@@ -11,7 +11,7 @@ import {
 import { Footer, Nav } from "./components";
 import { getSanityClient } from "./lib";
 import styles from "./styles/tailwind.css";
-import { Colors, type NavItem } from "./types";
+import { type Colors, type NavItem } from "./types";
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
@@ -38,6 +38,8 @@ export const loader: LoaderFunction = async ({ context }) => {
 
   const {
     mainNavigation,
+    footerNavigation,
+    footerText,
     logo,
     primary,
     primaryText,
@@ -53,11 +55,22 @@ export const loader: LoaderFunction = async ({ context }) => {
     secondaryDarkText,
     background,
   } = await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
-  const mainNav: NavItem[] = mainNavigation.map(
-    (r: { page: { title: string }; slug: { current: string } }) => {
-      return { name: r.page.title, to: r?.slug?.current ?? "/" };
-    }
-  );
+
+  const mainNav: NavItem[] = mainNavigation
+    ? mainNavigation.map(
+        (r: { page: { title: string }; slug: { current: string } }) => {
+          return { name: r.page.title, to: r?.slug?.current ?? "/" };
+        }
+      )
+    : [];
+
+  const footerNav: NavItem[] = footerNavigation
+    ? footerNavigation.map(
+        (r: { page: { title: string }; slug: { current: string } }) => {
+          return { name: r.page.title, to: r?.slug?.current ?? "/" };
+        }
+      )
+    : [];
 
   const colors: Colors = {
     primary,
@@ -77,6 +90,8 @@ export const loader: LoaderFunction = async ({ context }) => {
 
   return {
     mainNavigation: mainNav,
+    footerNavigation: footerNav,
+    footerText,
     title,
     logo,
     ENV: {
@@ -90,8 +105,17 @@ export const loader: LoaderFunction = async ({ context }) => {
 };
 
 export default function App() {
-  const { mainNavigation, ENV, logo, pageQuery, subPageQuery, title, colors } =
-    useLoaderData();
+  const {
+    mainNavigation,
+    footerNavigation,
+    footerText,
+    ENV,
+    logo,
+    pageQuery,
+    subPageQuery,
+    title,
+    colors,
+  } = useLoaderData();
 
   return (
     <html lang="en">
@@ -107,7 +131,11 @@ export default function App() {
           colors={colors}
         />
         <Outlet context={{ pageQuery, subPageQuery, title, colors }} />
-        {/* <Footer/> */}
+        <Footer
+          navigation={footerNavigation}
+          siteTitle={title}
+          footerText={footerText}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(ENV)}`,

@@ -28,11 +28,11 @@ const ContentPreviewComponent: FC<
     return null;
   }
   return (
-    <ul className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 xl:grid-cols-3 xl:gap-8 ">
+    <ul className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-8 ">
       {data[parentRoute.slug.current].map(
         ({ _id, title, description, openGraphImage, slug, previewTags }) => (
           <li key={_id}>
-            <div className="m-1 max-w-sm sm:w-auto h-[400px] rounded overflow-hidden shadow-lg">
+            <div className="m-1 max-w-sm sm:w-auto sm:h-[420px] rounded overflow-hidden shadow-lg">
               <Link
                 prefetch="intent"
                 to={`${parentRoute.slug.current}/${slug.current}`}
