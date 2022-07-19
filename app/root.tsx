@@ -36,25 +36,8 @@ export const loader: LoaderFunction = async ({ context }) => {
         }`
     );
 
-  const {
-    mainNavigation,
-    footerNavigation,
-    footerText,
-    logo,
-    primary,
-    primaryText,
-    primaryLight,
-    primaryLightText,
-    primaryDark,
-    primaryDarkText,
-    secondary,
-    secondaryText,
-    secondaryLight,
-    secondaryLightText,
-    secondaryDark,
-    secondaryDarkText,
-    background,
-  } = await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
+  const { mainNavigation, footerNavigation, footerText, logo, themes } =
+    await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
 
   const mainNav: NavItem[] = mainNavigation
     ? mainNavigation.map(
@@ -73,19 +56,7 @@ export const loader: LoaderFunction = async ({ context }) => {
     : [];
 
   const colors: Colors = {
-    primary,
-    primaryText,
-    primaryLight,
-    primaryLightText,
-    primaryDark,
-    primaryDarkText,
-    secondary,
-    secondaryText,
-    secondaryLight,
-    secondaryLightText,
-    secondaryDark,
-    secondaryDarkText,
-    background,
+    ...themes[0],
   };
 
   return {
