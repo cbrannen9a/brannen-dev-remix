@@ -36,7 +36,7 @@ export const loader: LoaderFunction = async ({ context }) => {
         }`
     );
 
-  const { mainNavigation, footerNavigation, footerText, logo, themes } =
+  const { mainNavigation, footerNavigation, footerText, logo, themes, social } =
     await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
 
   const mainNav: NavItem[] = mainNavigation
@@ -72,6 +72,7 @@ export const loader: LoaderFunction = async ({ context }) => {
     pageQuery,
     subPageQuery,
     colors,
+    social,
   };
 };
 
@@ -86,6 +87,7 @@ export default function App() {
     subPageQuery,
     title,
     colors,
+    social,
   } = useLoaderData();
 
   return (
@@ -106,6 +108,7 @@ export default function App() {
           navigation={footerNavigation}
           siteTitle={title}
           footerText={footerText}
+          social={social}
         />
         <script
           dangerouslySetInnerHTML={{
