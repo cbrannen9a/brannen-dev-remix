@@ -8,12 +8,12 @@ const ImageSection: FC<Pick<ImageSectionContent, "text" | "image" | "cta">> = ({
   image,
   cta,
 }) => (
-  <div className="m-1">
-    <Image value={image.asset} alt={image?.alt || ""} />
+  <section className="m-4">
+    <Image className="mx-auto" value={image.asset} alt={image?.alt || ""} />
     <div className="text-base text-gray-900 prose">
       <BlockContent text={text} />
     </div>
-  </div>
+  </section>
 );
 
 export default ImageSection;
