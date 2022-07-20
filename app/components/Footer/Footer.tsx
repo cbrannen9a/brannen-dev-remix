@@ -22,11 +22,10 @@ const Footer: FC<Props> = ({ siteTitle, navigation, footerText, social }) => {
               >
                 <svg className="w-9 h-9">
                   <symbol
-                    key={si.title.name}
-                    id={si.title.name}
+                    id={si._key}
                     dangerouslySetInnerHTML={{ __html: si.title.svg }}
                   />
-                  <use key={si.title.name} href={`#${si.title.name}`} />
+                  <use href={`#${si._key}`} />
                 </svg>
               </a>
             ))}
@@ -79,7 +78,11 @@ interface Props {
   siteTitle: string;
   navigation: NavItem[];
   footerText: PortableTextBlock[];
-  social: { title: { name: string; svg: string }; link: string }[];
+  social: {
+    _key: string;
+    title: { name: string; svg: string };
+    link: string;
+  }[];
 }
 
 export default Footer;
