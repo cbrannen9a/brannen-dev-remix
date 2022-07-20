@@ -154,7 +154,14 @@ export interface Colors {
   secondaryDarkText: Color;
   background: Color;
 }
+
+export interface RawNavItem {
+  _id: string;
+  page: { title: string };
+  slug: { current: string };
+}
 export interface NavItem {
+  id: string;
   name: string;
   to: string;
 }

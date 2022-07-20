@@ -11,7 +11,7 @@ import {
 import { Footer, Nav } from "./components";
 import { getSanityClient } from "./lib";
 import styles from "./styles/tailwind.css";
-import { type Colors, type NavItem } from "./types";
+import { type RawNavItem, type Colors, type NavItem } from "./types";
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
@@ -40,19 +40,15 @@ export const loader: LoaderFunction = async ({ context }) => {
     await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
 
   const mainNav: NavItem[] = mainNavigation
-    ? mainNavigation.map(
-        (r: { page: { title: string }; slug: { current: string } }) => {
-          return { name: r.page.title, to: r?.slug?.current ?? "/" };
-        }
-      )
+    ? mainNavigation.map((r: RawNavItem) => {
+        return { id: r._id, name: r.page.title, to: r?.slug?.current ?? "/" };
+      })
     : [];
 
   const footerNav: NavItem[] = footerNavigation
-    ? footerNavigation.map(
-        (r: { page: { title: string }; slug: { current: string } }) => {
-          return { name: r.page.title, to: r?.slug?.current ?? "/" };
-        }
-      )
+    ? footerNavigation.map((r: RawNavItem) => {
+        return { id: r._id, name: r.page.title, to: r?.slug?.current ?? "/" };
+      })
     : [];
 
   const colors: Colors = {

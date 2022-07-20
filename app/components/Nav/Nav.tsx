@@ -16,7 +16,7 @@ const Nav: FC<Props> = ({ siteTitle, navigation = [], logo, colors }) => {
             <span className="sr-only">{siteTitle}</span>
             <Link prefetch="intent" to="/">
               <img
-                className="h-8 w-8"
+                className="h-8"
                 src={`${logo?.asset?.url}`}
                 alt={`${logo.alt}`}
               />
@@ -72,7 +72,7 @@ const Nav: FC<Props> = ({ siteTitle, navigation = [], logo, colors }) => {
                   <span className="sr-only">{siteTitle}</span>
                   <Link prefetch="intent" to="/">
                     <img
-                      className="h-8 w-8"
+                      className="h-8"
                       src={`${logo?.asset?.url}`}
                       alt={`${logo.alt}`}
                     />
