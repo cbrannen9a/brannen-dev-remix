@@ -74,6 +74,7 @@ export interface TextSectionContent extends BaseContent {
 
 export interface ContentPreview extends BaseContent {
   _type: "contentPreview";
+  heading: string;
   query: Query;
   params: KeyValue[];
   parentRoute: RouteReference;
