@@ -60,11 +60,12 @@ const ContentPreviewComponent: FC<
                     <div className="text-gray-700 text-base mb-2">
                       {description ? <BlockContent text={description} /> : null}
                     </div>
-                    <div className="h-24 overflow-hidden">
+                    <div className="h-24 m-1 overflow-hidden">
                       {previewTags ? (
                         <Tags
                           ariaLabel="keywords"
                           tags={getTags(previewTags)}
+                          preview
                         />
                       ) : null}
                     </div>
