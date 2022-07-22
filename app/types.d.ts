@@ -199,3 +199,8 @@ export interface Query {
   queryCode: { code: string };
   queryParams: { key: string; optional: boolean };
 }
+
+export interface ContextData {
+  url: string;
+  title: string;
+}

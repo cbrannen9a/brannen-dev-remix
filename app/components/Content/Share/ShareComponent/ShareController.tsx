@@ -1,6 +1,7 @@
 import { type FC } from "react";
 
 const Share: FC<Props> = ({
+  className,
   shareData,
   children,
   onInteraction,
@@ -24,7 +25,7 @@ const Share: FC<Props> = ({
   };
   return (
     <button
-      className="appearance-none"
+      className={className}
       onClick={handleOnClick}
       type="button"
       disabled={disabled}
@@ -35,6 +36,7 @@ const Share: FC<Props> = ({
 };
 
 interface Props {
+  className: string;
   shareData: ShareData;
   children: React.ReactNode;
   onSuccess?: () => void;

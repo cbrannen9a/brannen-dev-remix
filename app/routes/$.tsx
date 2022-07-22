@@ -4,7 +4,7 @@ import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Content } from "~/components";
 
 import { getPageData, queryHelper } from "~/lib";
-import { type Colors } from "~/types";
+import type { ContextData, Colors } from "~/types";
 
 export const meta: MetaFunction = ({ data, parentsData }) => {
   const { pageData } = data;
@@ -50,16 +50,22 @@ export const ErrorBoundary = () => {
 };
 
 export default function Body() {
-  const { pageData, previewData } = useLoaderData();
+  const { pageData, previewData, requestUrl } = useLoaderData();
   const { colors, sanityDataset, sanityProjectId } = useOutletContext<{
     colors: Colors;
     sanityDataset: string;
     sanityProjectId: string;
   }>();
 
+  const contextData: ContextData = {
+    url: requestUrl,
+    title: pageData.title,
+  };
+
   return pageData ? (
     <Content
       content={pageData.content}
+      contextData={contextData}
       colors={colors}
       previewContent={previewData}
       sanityDataset={sanityDataset}

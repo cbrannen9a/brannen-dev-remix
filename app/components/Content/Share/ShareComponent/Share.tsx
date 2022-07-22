@@ -4,6 +4,7 @@ import ShareController from "./ShareController";
 import SharePopup from "./SharePopup";
 
 const Share: FC<WithColors<Props>> = ({
+  className,
   shareData,
   children,
   onInteraction,
@@ -21,6 +22,7 @@ const Share: FC<WithColors<Props>> = ({
   return (
     <>
       <ShareController
+        className={className}
         shareData={shareData}
         onInteraction={onInteraction}
         onSuccess={onSuccess}
@@ -42,6 +44,7 @@ const Share: FC<WithColors<Props>> = ({
 };
 
 interface Props {
+  className: string;
   shareData: ShareData;
   children: React.ReactNode;
   onSuccess?: () => void;
