@@ -28,7 +28,7 @@ const ContentPreviewComponent: FC<
     return null;
   }
   return (
-    <div className="m-2 mb-8 mx-auto px-4">
+    <div className="m-2 mb-8 mx-auto px-4 z-0">
       {heading ? (
         <h2 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
           {heading}
@@ -46,7 +46,7 @@ const ContentPreviewComponent: FC<
                   <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative p-6 xl:p-8">
                     {openGraphImage ? (
                       <Image
-                        className="max-w-sm m-auto"
+                        className="max-w-sm m-auto z-0"
                         value={openGraphImage}
                         alt={title}
                         width={300}

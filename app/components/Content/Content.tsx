@@ -6,6 +6,7 @@ import Cards from "./Cards";
 import ContentPreview from "./ContentPreview";
 import Hero from "./Hero";
 import ImageSection from "./ImageSection";
+import Share from "./Share";
 
 import Tags from "./Tags";
 import TextSection from "./TextSection";
@@ -27,6 +28,9 @@ const ContentComponent: FC<Props> = ({
       sanityProjectId={sanityProjectId}
     >
       <div className="min-h-screen">
+        <Share shareData={{ title: "share test", url: "https://brannen.dev" }}>
+          Test
+        </Share>
         {content.map((item) => {
           switch (item._type) {
             case "hero":

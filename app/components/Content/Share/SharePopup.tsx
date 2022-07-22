@@ -36,12 +36,11 @@ const SharePopup: FC<Props> = ({ shareData, onClose, onError }) => {
   };
 
   return (
-    <>
-      <div
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-        onClick={onClose}
-      />
-      <div className="fixed z-10 inset-0 overflow-y-auto">
+    <div
+      className="fixed z-10 inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      onClick={onClose}
+    >
+      <div className="fixed z-20 inset-0 overflow-y-auto">
         <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
           <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -49,20 +48,23 @@ const SharePopup: FC<Props> = ({ shareData, onClose, onError }) => {
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
                   {shareData.title}
                 </h3>
-                <button
-                  onClick={onClose}
-                  // baseComponent="button"
-                  // aphroditeStyles={[
-                  //   styles.genericButtonOverrides,
-                  //   styles.closeButton,
-                  // ]}
-                >
-                  {/* <Glyph
-                    src={Glyph.icons.close}
-                    size={12}
-                    ariaLabel="Close Share"
-                    ariaWrapperClassName={css(styles.icon)}
-                  /> */}
+                <button onClick={onClose}>
+                  <span className="sr-only">Close menu</span>
+                  <div className="h-6 w-6" aria-hidden="true">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      <g id="close">
+                        <path
+                          id="x"
+                          d="M18.717 6.697l-1.414-1.414-5.303 5.303-5.303-5.303-1.414 1.414 5.303 5.303-5.303 5.303 1.414 1.414 5.303-5.303 5.303 5.303 1.414-1.414-5.303-5.303z"
+                        />
+                      </g>
+                    </svg>
+                  </div>
                 </button>
               </div>
               <div className="mt-2">
@@ -110,7 +112,7 @@ const SharePopup: FC<Props> = ({ shareData, onClose, onError }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
