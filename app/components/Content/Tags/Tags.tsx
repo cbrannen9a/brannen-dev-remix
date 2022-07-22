@@ -5,7 +5,7 @@ import Tag from "./Tag";
 
 const Tags: FC<
   Pick<TagsContent, "tags" | "as" | "ariaLabel" | "title"> & {
-    preview: boolean;
+    preview?: boolean;
   }
 > = ({ tags, as = "tags", ariaLabel, title, preview }) => {
   switch (as) {
