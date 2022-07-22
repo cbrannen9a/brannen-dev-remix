@@ -28,9 +28,6 @@ const ContentComponent: FC<Props> = ({
       sanityProjectId={sanityProjectId}
     >
       <div className="min-h-screen">
-        <Share shareData={{ title: "share test", url: "https://brannen.dev" }}>
-          Test
-        </Share>
         {content.map((item) => {
           switch (item._type) {
             case "hero":
@@ -53,6 +50,8 @@ const ContentComponent: FC<Props> = ({
                   data={previewContent}
                 />
               );
+            case "shareSection":
+              return <Share key={item._key} colors={colors} {...item} />;
             default:
               return null;
           }

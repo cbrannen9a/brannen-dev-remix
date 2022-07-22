@@ -9,7 +9,8 @@ export type ContentTypes =
   | "imageSection"
   | "contentPreview"
   | "route"
-  | "tags";
+  | "tags"
+  | "shareSection";
 
 export interface BaseEntity {
   _id: string;
@@ -40,6 +41,11 @@ export interface HeroContent extends BaseContent {
 export interface CardsContent extends BaseContent {
   _type: "cards";
   cards: CardType[];
+}
+
+export interface ShareContent extends BaseContent {
+  _type: "shareSection";
+  shareData: ShareData;
 }
 
 export interface BannerContent extends BaseContent {
@@ -112,7 +118,8 @@ export type Content =
   | TextSectionContent
   | ImageSectionContent
   | ContentPreview
-  | RouteReference;
+  | RouteReference
+  | ShareContent;
 
 export type Slug = {
   _type: "slug";
@@ -155,6 +162,8 @@ export interface Colors {
   secondaryDarkText: Color;
   background: Color;
 }
+
+export type WithColors<T> = T & { colors: Colors };
 
 export interface RawNavItem {
   _id: string;

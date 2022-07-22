@@ -17,7 +17,9 @@ const Tags: FC<
               {title ? <h2>{title}</h2> : null}
               <ul className="flex flex-row flex-wrap justify-start list-none relative overflow-hidden">
                 {tags.map((chip) => (
-                  <Chip key={chip._key} {...chip} />
+                  <li key={chip._key}>
+                    <Chip {...chip} />
+                  </li>
                 ))}
               </ul>
             </div>
@@ -33,7 +35,9 @@ const Tags: FC<
           } h-8 min-h-full flex flex-row flex-wrap list-none relative overflow-hidden`}
         >
           {tags.map((tag) => (
-            <Tag key={tag._key} {...tag} />
+            <li key={tag._key}>
+              <Tag {...tag} />
+            </li>
           ))}
         </ul>
       );

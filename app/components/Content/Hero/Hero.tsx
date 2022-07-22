@@ -1,13 +1,13 @@
-import type { Colors, HeroContent } from "~/types";
+import type { HeroContent, WithColors } from "~/types";
 import { type FC } from "react";
 
 import { PortableText } from "@portabletext/react";
 import { Ctas, Image } from "../CommonContent";
 
 const Hero: FC<
-  Pick<HeroContent, "heading" | "subHeading" | "tagline" | "ctas" | "image"> & {
-    colors: Colors;
-  }
+  WithColors<
+    Pick<HeroContent, "heading" | "subHeading" | "tagline" | "ctas" | "image">
+  >
 > = ({ heading, subHeading, tagline, ctas, image, colors }) => {
   return (
     <section className={`md:${image ? "columns-2" : "columns-1"}`}>

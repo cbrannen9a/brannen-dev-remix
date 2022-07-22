@@ -1,6 +1,12 @@
 import { type FC, useState, useEffect, useRef } from "react";
+import { type WithColors } from "~/types";
 
-const SharePopup: FC<Props> = ({ shareData, onClose, onError }) => {
+const SharePopup: FC<WithColors<Props>> = ({
+  shareData,
+  onClose,
+  onError,
+  colors,
+}) => {
   const [state, setState] = useState<ShareState>("pending");
   const timer = useRef<NodeJS.Timeout | null>(null);
 
@@ -94,6 +100,10 @@ const SharePopup: FC<Props> = ({ shareData, onClose, onError }) => {
                   readOnly
                 />
                 <button
+                  style={{
+                    backgroundColor: colors.primary.hex,
+                    color: colors.primaryText.hex,
+                  }}
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                   onClick={copyClicked}
                 >

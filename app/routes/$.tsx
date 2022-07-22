@@ -28,23 +28,15 @@ export const meta: MetaFunction = ({ data, parentsData }) => {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const requestUrl = new URL(request?.url);
-  const preview =
-    requestUrl?.searchParams?.get("preview") ===
-    process.env.SANITY_PREVIEW_SECRET;
 
   const { query, queryParams } = queryHelper(params["*"]);
 
-  const { pageData, previewData } = await getPageData(
-    query,
-    queryParams,
-    preview
-  );
+  const { pageData, previewData } = await getPageData(query, queryParams);
 
   return {
     pageData,
     previewData,
-    sanityProjectId: process.env.SANITY_PROJECT_ID,
-    sanityDataset: process.env.SANITY_DATASET,
+    requestUrl,
   };
 };
 
@@ -58,9 +50,12 @@ export const ErrorBoundary = () => {
 };
 
 export default function Body() {
-  const { pageData, previewData, sanityDataset, sanityProjectId } =
-    useLoaderData();
-  const { colors } = useOutletContext<{ colors: Colors }>();
+  const { pageData, previewData } = useLoaderData();
+  const { colors, sanityDataset, sanityProjectId } = useOutletContext<{
+    colors: Colors;
+    sanityDataset: string;
+    sanityProjectId: string;
+  }>();
 
   return pageData ? (
     <Content
