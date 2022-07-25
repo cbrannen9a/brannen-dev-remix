@@ -114,22 +114,17 @@ const SharePopup: FC<WithColors<Props>> = ({
                   {getButtonText(state)}
                   {state === "success" ? (
                     <svg
-                      className="ml-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20px"
-                      height="20px"
-                      viewBox="-0.5 -0.5 85 65"
+                      aria-hidden="true"
+                      height="20"
+                      viewBox="0 0 16 16"
+                      width="20"
                     >
-                      <g>
-                        <path
-                          d="M 2 32 L 24.93 54.93 Q 32 62 38.4 54.32 L 82 2"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="8"
-                          strokeMiterlimit="10"
-                          pointerEvents="stroke"
-                        />
-                      </g>
+                      <path
+                        fillRule="evenodd"
+                        fill="currentColor"
+                        stroke="currentColor"
+                        d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"
+                      ></path>
                     </svg>
                   ) : null}
                 </button>
