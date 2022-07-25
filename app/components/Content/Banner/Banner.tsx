@@ -1,9 +1,9 @@
-import { type Colors, type BannerContent } from "~/types";
+import { type BannerContent, type WithColors } from "~/types";
 import { type FC } from "react";
 import { Ctas } from "../CommonContent";
 
 const Banner: FC<
-  Pick<BannerContent, "heading" | "subHeading" | "ctas"> & { colors: Colors }
+  WithColors<Pick<BannerContent, "heading" | "subHeading" | "ctas">>
 > = ({ heading, subHeading, ctas, colors }) => (
   <div className="bg-gray-50">
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">

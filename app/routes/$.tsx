@@ -4,7 +4,7 @@ import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Content } from "~/components";
 
 import { getPageData, queryHelper } from "~/lib";
-import { type Colors } from "~/types";
+import type { ContextData, Colors } from "~/types";
 
 export const meta: MetaFunction = ({ data, parentsData }) => {
   const { pageData } = data;
@@ -28,23 +28,15 @@ export const meta: MetaFunction = ({ data, parentsData }) => {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const requestUrl = new URL(request?.url);
-  const preview =
-    requestUrl?.searchParams?.get("preview") ===
-    process.env.SANITY_PREVIEW_SECRET;
 
   const { query, queryParams } = queryHelper(params["*"]);
 
-  const { pageData, previewData } = await getPageData(
-    query,
-    queryParams,
-    preview
-  );
+  const { pageData, previewData } = await getPageData(query, queryParams);
 
   return {
     pageData,
     previewData,
-    sanityProjectId: process.env.SANITY_PROJECT_ID,
-    sanityDataset: process.env.SANITY_DATASET,
+    requestUrl,
   };
 };
 
@@ -58,13 +50,22 @@ export const ErrorBoundary = () => {
 };
 
 export default function Body() {
-  const { pageData, previewData, sanityDataset, sanityProjectId } =
-    useLoaderData();
-  const { colors } = useOutletContext<{ colors: Colors }>();
+  const { pageData, previewData, requestUrl } = useLoaderData();
+  const { colors, sanityDataset, sanityProjectId } = useOutletContext<{
+    colors: Colors;
+    sanityDataset: string;
+    sanityProjectId: string;
+  }>();
+
+  const contextData: ContextData = {
+    url: requestUrl,
+    title: pageData.title,
+  };
 
   return pageData ? (
     <Content
       content={pageData.content}
+      contextData={contextData}
       colors={colors}
       previewContent={previewData}
       sanityDataset={sanityDataset}

@@ -18,6 +18,7 @@ const Footer: FC<Props> = ({ siteTitle, navigation, footerText, social }) => {
               <a
                 key={si.title.name}
                 href={si.link}
+                aria-label={si.title.name}
                 className="mr-6 text-gray-600"
               >
                 <svg className="w-9 h-9">

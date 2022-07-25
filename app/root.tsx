@@ -25,7 +25,7 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export const loader: LoaderFunction = async ({ context }) => {
+export const loader: LoaderFunction = async () => {
   const { title, siteSettingsQuery, pageQuery, subPageQuery } =
     await getSanityClient().fetch(
       `*[_id == "siteSettings"][0]{
@@ -61,10 +61,8 @@ export const loader: LoaderFunction = async ({ context }) => {
     footerText,
     title,
     logo,
-    ENV: {
-      SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
-      SANITY_DATASET: process.env.SANITY_DATASET,
-    },
+    sanityDataset: process.env.SANITY_DATASET,
+    sanityProjectId: process.env.SANITY_PROJECT_ID,
     pageQuery,
     subPageQuery,
     colors,
@@ -72,12 +70,15 @@ export const loader: LoaderFunction = async ({ context }) => {
   };
 };
 
+export const unstable_shouldReload = () => false;
+
 export default function App() {
   const {
+    sanityDataset,
+    sanityProjectId,
     mainNavigation,
     footerNavigation,
     footerText,
-    ENV,
     logo,
     pageQuery,
     subPageQuery,
@@ -99,17 +100,21 @@ export default function App() {
           siteTitle={title}
           colors={colors}
         />
-        <Outlet context={{ pageQuery, subPageQuery, title, colors }} />
+        <Outlet
+          context={{
+            pageQuery,
+            subPageQuery,
+            title,
+            colors,
+            sanityDataset,
+            sanityProjectId,
+          }}
+        />
         <Footer
           navigation={footerNavigation}
           siteTitle={title}
           footerText={footerText}
           social={social}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(ENV)}`,
-          }}
         />
         <ScrollRestoration />
         <Scripts />
