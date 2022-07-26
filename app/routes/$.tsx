@@ -1,5 +1,8 @@
 import { toPlainText } from "@portabletext/react";
-import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
+import {
+  type MetaFunction,
+  type LoaderFunction,
+} from "@remix-run/server-runtime";
 import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Content } from "~/components";
 
