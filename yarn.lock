@@ -1250,6 +1250,11 @@
     eslint-plugin-react-hooks "^4.3.0"
     eslint-plugin-testing-library "^5.0.5"
 
+"@remix-run/netlify-edge@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/netlify-edge/-/netlify-edge-1.0.0.tgz#02ea2163b2b6e1b3941d9109403348a8aa3a2962"
+  integrity sha512-g6Jas4mjmM3PEkOEBkpyKBoSvuYmUS74wgU+BJfMyWz39LQjneHjQzfWYuNshvi398Bcw0JsYYCVEh8WGOBwdQ==
+
 "@remix-run/netlify@^1.6.5":
   version "1.6.5"
   resolved "https://registry.yarnpkg.com/@remix-run/netlify/-/netlify-1.6.5.tgz#7536785c1ccd95f087cf22a5af8804f653d2164c"
@@ -4417,6 +4422,11 @@ isarray@1.0.0, isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==
+
+isbot@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/isbot/-/isbot-3.5.0.tgz#602fd980be154c0ba37e8b9154af105627c12398"
+  integrity sha512-QOFF7IE7hUdzo8pbhCubeiMzKdLZt+W/UwRZWwg+zghmnqXoMwh2V0bi5UT+oIvoD0IWCWjzAtp30ZrrRwJVCg==
 
 isexe@^2.0.0:
   version "2.0.0"
