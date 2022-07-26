@@ -3,6 +3,7 @@ import type {
   Content as ContentItem,
   PageData,
   LoadableContent,
+  PageContent,
 } from "~/types";
 import { getSanityClient } from "./client";
 
@@ -88,8 +89,10 @@ export const getPageData = async (
   preview = false
 ) => {
   const data = await getSanityClient(preview).fetch<
-    PageData | { content: ContentItem[] }
+    PageData | PageContent | null
   >(query, queryParams);
+
+  if (!data) return { pageData: null, previewData: null };
 
   const pageData = isPage(data) ? data.page : data;
 

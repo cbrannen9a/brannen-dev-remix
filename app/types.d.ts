@@ -182,11 +182,13 @@ export interface KeyValue {
 }
 
 export interface PageData {
-  page: {
-    title: string;
-    content: Content[];
-  };
+  page: PageContent;
   slug: Slug;
+}
+
+export interface PageContent {
+  title: string;
+  content: Content[];
 }
 
 export interface LoadableContent {
