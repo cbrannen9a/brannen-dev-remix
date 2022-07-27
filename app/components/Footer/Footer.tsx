@@ -36,7 +36,7 @@ const Footer: FC<Props> = ({ siteTitle, navigation, footerText, social }) => {
       <div className="mx-6 py-10 text-center md:text-left">
         <div className="grid grid-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="">
-            <h6
+            <span
               className="
             uppercase
             font-semibold
@@ -48,7 +48,7 @@ const Footer: FC<Props> = ({ siteTitle, navigation, footerText, social }) => {
           "
             >
               {siteTitle}
-            </h6>
+            </span>
             <BlockContent text={footerText} />
           </div>
           <div className=""></div>
