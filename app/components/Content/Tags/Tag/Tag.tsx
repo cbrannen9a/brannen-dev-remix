@@ -28,7 +28,7 @@ const Tag: FC<TagType> = ({ title, link, route, media }) => {
     );
   }
   return (
-    <div className="h-8 ml-4 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">
+    <div className="ml-1 h-8 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">
       <TagMedia media={media} title={title} />
       {title}
     </div>
