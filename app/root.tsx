@@ -94,12 +94,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Nav
-          navigation={mainNavigation}
-          logo={logo}
-          siteTitle={title}
-          colors={colors}
-        />
+        <Nav navigation={mainNavigation} siteTitle={title} colors={colors} />
         <Outlet
           context={{
             pageQuery,

@@ -3,7 +3,7 @@ import { type FC, useState } from "react";
 import { Popover } from "@headlessui/react";
 import { type Colors, type NavItem } from "~/types";
 
-const Nav: FC<Props> = ({ siteTitle, navigation = [], logo, colors }) => {
+const Nav: FC<Props> = ({ siteTitle, navigation = [], colors }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <Popover className="relative">
@@ -11,15 +11,15 @@ const Nav: FC<Props> = ({ siteTitle, navigation = [], logo, colors }) => {
         className="max-w-7xl mx-auto px-4 sm:px-6"
         style={{ backgroundColor: colors.secondary.hex }}
       >
-        <div className="flex justify-between items-center  py-6 md:justify-start md:space-x-10">
+        <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
-            <span className="sr-only">{siteTitle}</span>
             <Link prefetch="intent" to="/">
-              <img
-                className="h-8"
-                src={`${logo?.asset?.url}`}
-                alt={`${logo.alt}`}
-              />
+              <h1
+                className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
+                style={{ color: colors.primary.hex }}
+              >
+                {siteTitle}
+              </h1>
             </Link>
           </div>
           <div className="-mr-2 -my-2 md:hidden">
@@ -69,13 +69,13 @@ const Nav: FC<Props> = ({ siteTitle, navigation = [], logo, colors }) => {
             <div className="pt-5 pb-6 px-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="sr-only">{siteTitle}</span>
                   <Link prefetch="intent" to="/">
-                    <img
-                      className="h-8"
-                      src={`${logo?.asset?.url}`}
-                      alt={`${logo.alt}`}
-                    />
+                    <h1
+                      className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
+                      style={{ color: colors.primary.hex }}
+                    >
+                      {siteTitle}
+                    </h1>
                   </Link>
                 </div>
                 <div className="-mr-2">
@@ -135,7 +135,6 @@ const Nav: FC<Props> = ({ siteTitle, navigation = [], logo, colors }) => {
 interface Props {
   siteTitle?: string;
   navigation?: NavItem[];
-  logo: { alt?: string; asset?: { url?: string } };
   colors: Colors;
 }
 
