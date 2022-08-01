@@ -1,4 +1,8 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import type {
+  ErrorBoundaryComponent,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -6,9 +10,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
   useLoaderData,
 } from "@remix-run/react";
-import { Footer, Nav } from "./components";
+import { ErrorPage, Footer, Nav } from "./components";
 import { getSanityClient } from "./lib";
 import styles from "./styles/tailwind.css";
 import { type RawNavItem, type Colors, type NavItem } from "./types";
@@ -72,6 +77,45 @@ export const loader: LoaderFunction = async () => {
 
 export const unstable_shouldReload = () => false;
 
+export function CatchBoundary() {
+  const caught = useCatch();
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>
+          {caught.status} {caught.statusText}
+        </h1>
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error(error);
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <ErrorPage
+          message="Something's gone wrong"
+          link={{ to: "/", name: "Home", id: "home" }}
+        />
+        <Scripts />
+      </body>
+    </html>
+  );
+};
+
 export default function App() {
   const {
     sanityDataset,
@@ -79,7 +123,6 @@ export default function App() {
     mainNavigation,
     footerNavigation,
     footerText,
-    logo,
     pageQuery,
     subPageQuery,
     title,

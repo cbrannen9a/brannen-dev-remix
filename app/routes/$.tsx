@@ -1,7 +1,11 @@
 import { toPlainText } from "@portabletext/react";
-import { type MetaFunction, type LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
-import { Content } from "~/components";
+import {
+  type MetaFunction,
+  type LoaderFunction,
+  type ErrorBoundaryComponent,
+} from "@remix-run/node";
+import { useLoaderData, useLocation, useOutletContext } from "@remix-run/react";
+import { Content, ErrorPage } from "~/components";
 
 import { getPageData, queryHelper } from "~/lib";
 import type { ContextData, Colors, PageContent, PreviewContent } from "~/types";
@@ -32,8 +36,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const { query, queryParams } = queryHelper(params["*"]);
 
   const { pageData, previewData } = await getPageData(query, queryParams);
+
   if (!pageData) {
-    throw new Error(`PageData missing for ${requestUrl}`);
+    throw new Response("Not Found", {
+      status: 404,
+      statusText: `PageData missing for ${requestUrl}`,
+    });
   }
   return {
     pageData,
@@ -42,17 +50,24 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   };
 };
 
-export const ErrorBoundary = () => {
+export const CatchBoundary = () => {
+  const location = useLocation();
+  console.error(`Page not found ${location.pathname}`);
   return (
-    <div className="flex flex-col m-2 h-screen text-center items-center">
-      <div>Something's gone wrong</div>
-      <Link
-        to="/"
-        className="mt-2 p-3 flex items-center rounded-md border-2 border-gray-300 hover:bg-gray-50"
-      >
-        <span className="mx-4 text-base font-medium">Home</span>
-      </Link>
-    </div>
+    <ErrorPage
+      message="We couldn't find that page!"
+      link={{ to: "/", name: "Home", id: "home" }}
+    />
+  );
+};
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error(error);
+  return (
+    <ErrorPage
+      message="Something's gone wrong"
+      link={{ to: "/", name: "Home", id: "home" }}
+    />
   );
 };
 
