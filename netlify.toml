@@ -15,3 +15,12 @@
   for = "/build/*"
   [headers.values]
     "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+  # to audit a specific absolute url
+  [[plugins.inputs.audits]]
+    url = "https://www.brannen.dev"
+
+
