@@ -53,9 +53,9 @@ const Footer: FC<Props> = ({ siteTitle, navigation, footerText, social }) => {
           </div>
           <div className=""></div>
           <div className="">
-            <h6 className="uppercase font-semibold mb-4 flex justify-center md:justify-start">
+            <span className="uppercase font-semibold mb-4 flex justify-center md:justify-start">
               Useful links
-            </h6>
+            </span>
 
             {navigation.map((item) => (
               <p key={item.name} className="mb-4">
