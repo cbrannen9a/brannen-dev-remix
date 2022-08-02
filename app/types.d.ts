@@ -108,6 +108,7 @@ export interface PreviewContent {
   description?: PortableTextBlock[];
   openGraphImage?: SanityImageAsset;
   previewTags?: { tags: Tag[] }[];
+  statusDate?: string;
 }
 
 export type Content =
@@ -183,12 +184,13 @@ export interface KeyValue {
 
 export interface PageData {
   page: PageContent;
-  slug: Slug;
 }
 
 export interface PageContent {
   title: string;
   content: Content[];
+  parentRoute?: { slug: Slug };
+  slug: Slug;
 }
 
 export interface LoadableContent {

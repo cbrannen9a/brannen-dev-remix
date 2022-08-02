@@ -2076,10 +2076,6 @@ video {
     display: flex;
   }
 
-  .sm\:h-\[420px\] {
-    height: 420px;
-  }
-
   .sm\:h-72 {
     height: 18rem;
   }

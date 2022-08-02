@@ -28,9 +28,11 @@ const contentQuery = ` ...,
               }
 
             },
+            parentRoute-> {slug { current}},
             openGraphImage {
               asset->
-            }
+            },
+            description 
 `;
 
 export const queryHelper = (
