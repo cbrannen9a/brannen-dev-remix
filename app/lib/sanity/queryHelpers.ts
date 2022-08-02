@@ -47,7 +47,10 @@ export const queryHelper = (
         {  ${contentQuery}
       }`,
         queryParams: {
-          slug: paramValue?.split("/")[paramValue.split("/").length - 1] ?? "/",
+          slug:
+            paramValue?.replace(/\/$/, "").split("/")[
+              paramValue?.replace(/\/$/, "").split("/").length - 1
+            ] ?? "/",
         },
       }
     : {
@@ -57,7 +60,7 @@ export const queryHelper = (
             ${contentQuery}
           }
       }`,
-        queryParams: { slug: paramValue ?? "/" },
+        queryParams: { slug: paramValue?.replace(/\//g, "") ?? "/" },
       };
 };
 
