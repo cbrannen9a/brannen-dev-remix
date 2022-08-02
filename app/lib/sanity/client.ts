@@ -8,7 +8,7 @@ export const sanityClient = new PicoSanity(config);
 // Authenticated client for fetching draft documents
 export const previewClient = new PicoSanity({
   ...config,
-  useCdn: false,
+  useCdn: process.env.NODE_ENV === "development",
   token: process.env.SANITY_API_TOKEN ?? ``,
 });
 
