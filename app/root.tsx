@@ -1,3 +1,4 @@
+import { toPlainText } from "@portabletext/react";
 import type {
   ErrorBoundaryComponent,
   LoaderFunction,
@@ -25,6 +26,7 @@ export function links() {
 export const meta: MetaFunction = ({ data }) => {
   return {
     title: `${data?.title}`,
+    description: `${data.description ? toPlainText(data.description) : ""}`,
     charset: "utf-8",
     viewport: "width=device-width,initial-scale=1",
   };
@@ -41,8 +43,15 @@ export const loader: LoaderFunction = async () => {
         }`
     );
 
-  const { mainNavigation, footerNavigation, footerText, logo, themes, social } =
-    await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
+  const {
+    mainNavigation,
+    footerNavigation,
+    footerText,
+    logo,
+    themes,
+    social,
+    frontpage,
+  } = await getSanityClient().fetch(siteSettingsQuery.queryCode.code);
 
   const mainNav: NavItem[] = mainNavigation
     ? mainNavigation.map((r: RawNavItem) => {
@@ -65,6 +74,7 @@ export const loader: LoaderFunction = async () => {
     footerNavigation: footerNav,
     footerText,
     title,
+    description: frontpage.description,
     logo,
     sanityDataset: process.env.SANITY_DATASET,
     sanityProjectId: process.env.SANITY_PROJECT_ID,

@@ -3,6 +3,7 @@ import {
   type MetaFunction,
   type LoaderFunction,
   type ErrorBoundaryComponent,
+  redirect,
 } from "@remix-run/node";
 import { useLoaderData, useLocation, useOutletContext } from "@remix-run/react";
 import { Content, ErrorPage } from "~/components";
@@ -30,22 +31,34 @@ export const meta: MetaFunction = ({ data, parentsData }) => {
   };
 };
 
+const queryPageData = async (path: string | undefined) => {
+  const { query, queryParams } = queryHelper(path);
+
+  const { pageData, previewData } = await getPageData(query, queryParams);
+  return { pageData, previewData };
+};
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const requestUrl = new URL(request?.url);
 
-  const { query, queryParams } = queryHelper(params["*"]);
+  let pageData = await queryPageData(params["*"]);
 
-  const { pageData, previewData } = await getPageData(query, queryParams);
+  if (!pageData.pageData) {
+    pageData = await queryPageData(`/${params["*"]}`);
+    if (pageData?.pageData) {
+      return redirect(
+        `${pageData?.pageData?.parentRoute?.slug.current}/${pageData.pageData.slug.current}`
+      );
+    }
 
-  if (!pageData) {
     throw new Response("Not Found", {
       status: 404,
       statusText: `PageData missing for ${requestUrl}`,
     });
   }
   return {
-    pageData,
-    previewData,
+    pageData: pageData.pageData,
+    previewData: pageData.previewData,
     requestUrl,
   };
 };
@@ -88,7 +101,7 @@ export default function Body() {
     title: pageData?.title ?? "",
   };
 
-  return pageData ? (
+  return pageData?.content ? (
     <Content
       content={pageData.content}
       contextData={contextData}
