@@ -3,7 +3,7 @@ import type {
   ErrorBoundaryComponent,
   LoaderFunction,
   MetaFunction,
-} from "@remix-run/node";
+} from "@remix-run/server-runtime";
 import {
   Links,
   LiveReload,
@@ -76,8 +76,8 @@ export const loader: LoaderFunction = async () => {
     title,
     description: frontpage.description,
     logo,
-    sanityDataset: process.env.SANITY_DATASET,
-    sanityProjectId: process.env.SANITY_PROJECT_ID,
+    sanityDataset: Deno.env.get("SANITY_DATASET"),
+    sanityProjectId: Deno.env.get("SANITY_PROJECT_ID"),
     pageQuery,
     subPageQuery,
     colors,

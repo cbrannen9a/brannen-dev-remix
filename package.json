@@ -40,6 +40,7 @@
     "@portabletext/types": "^1.0.3",
     "@remix-run/dev": "^1.6.5",
     "@remix-run/eslint-config": "^1.6.5",
+    "@remix-run/serve": "^1.6.7",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/react-syntax-highlighter": "^15.5.3",
