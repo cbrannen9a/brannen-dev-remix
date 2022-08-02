@@ -6,6 +6,15 @@
   command = "remix watch"
   port = 3000
 
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/edge_functions/server"
+  status = 200
+
+[[edge_functions]]
+path = "/*"
+function = "server"
+
 [[headers]]
   for = "/build/*"
   [headers.values]

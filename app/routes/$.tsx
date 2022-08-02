@@ -4,7 +4,7 @@ import {
   type LoaderFunction,
   type ErrorBoundaryComponent,
   redirect,
-} from "@remix-run/node";
+} from "@remix-run/deno";
 import { useLoaderData, useLocation, useOutletContext } from "@remix-run/react";
 import { Content, ErrorPage } from "~/components";
 
